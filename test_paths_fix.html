@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路徑檢測測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-image {
+            max-width: 100px;
+            max-height: 100px;
+            border: 2px solid #ddd;
+            margin: 10px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>路徑檢測測試</h1>
+    
+    <div class="test-section">
+        <h2>環境資訊</h2>
+        <p><strong>當前 URL:</strong> <span id="currentUrl"></span></p>
+        <p><strong>Hostname:</strong> <span id="hostname"></span></p>
+        <p><strong>Pathname:</strong> <span id="pathname"></span></p>
+        <p><strong>檢測到的 Base Path:</strong> <span id="basePath"></span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>頭貼圖片測試</h2>
+        <p><strong>測試路徑:</strong> <span id="avatarPath"></span></p>
+        <img id="testAvatar" class="test-image" alt="測試頭貼">
+        <p id="avatarStatus"></p>
+    </div>
+
+    <div class="test-section">
+        <h2>配件圖片測試</h2>
+        <p><strong>測試路徑:</strong> <span id="accessoryPath"></span></p>
+        <img id="testAccessory" class="test-image" alt="測試配件">
+        <p id="accessoryStatus"></p>
+    </div>
+
+    <div class="test-section">
+        <h2>路徑函數測試</h2>
+        <pre id="pathTests"></pre>
+    </div>
+
+    <script>
+        // 動態路徑檢測函數
+        function getBasePath() {
+            const hostname = window.location.hostname;
+            const pathname = window.location.pathname;
+            
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                return '';
+            }
+            
+            if (pathname.includes('/avatar-search/')) {
+                return '/avatar-search';
+            }
+            
+            return '';
+        }
+
+        function getImagePath(folder, filename) {
+            const basePath = getBasePath();
+            return `${basePath}/${folder}/${encodeURIComponent(filename)}`;
+        }
+
+        function getAvatarPath(filename) {
+            return getImagePath('Avatar', filename);
+        }
+
+        function getAccessoryPath(filename) {
+            return getImagePath('Accessories', filename);
+        }
+
+        // 測試函數
+        function testImageLoad(imgElement, path, statusElement) {
+            imgElement.onload = function() {
+                statusElement.textContent = '✅ 圖片載入成功';
+                statusElement.className = 'success';
+            };
+            imgElement.onerror = function() {
+                statusElement.textContent = '❌ 圖片載入失敗';
+                statusElement.className = 'error';
+            };
+            imgElement.src = path;
+        }
+
+        // 頁面載入時執行測試
+        window.addEventListener('load', function() {
+            // 顯示環境資訊
+            document.getElementById('currentUrl').textContent = window.location.href;
+            document.getElementById('hostname').textContent = window.location.hostname;
+            document.getElementById('pathname').textContent = window.location.pathname;
+            document.getElementById('basePath').textContent = getBasePath();
+
+            // 測試頭貼圖片
+            const avatarPath = getAvatarPath('avatar-1.png');
+            document.getElementById('avatarPath').textContent = avatarPath;
+            testImageLoad(
+                document.getElementById('testAvatar'),
+                avatarPath,
+                document.getElementById('avatarStatus')
+            );
+
+            // 測試配件圖片
+            const accessoryPath = getAccessoryPath('Frame 427 2.png');
+            document.getElementById('accessoryPath').textContent = accessoryPath;
+            testImageLoad(
+                document.getElementById('testAccessory'),
+                accessoryPath,
+                document.getElementById('accessoryStatus')
+            );
+
+            // 路徑函數測試
+            const tests = [
+                `getBasePath(): "${getBasePath()}"`,
+                `getAvatarPath('avatar-1.png'): "${getAvatarPath('avatar-1.png')}"`,
+                `getAvatarPath('avatar-2.png'): "${getAvatarPath('avatar-2.png')}"`,
+                `getAccessoryPath('Frame 427 2.png'): "${getAccessoryPath('Frame 427 2.png')}"`,
+                `getAccessoryPath('瑪瑙耳環.png'): "${getAccessoryPath('瑪瑙耳環.png')}"`,
+            ];
+            document.getElementById('pathTests').textContent = tests.join('\n');
+        });
+    </script>
+</body>
+</html> 

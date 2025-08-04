@@ -294,7 +294,7 @@ async function loadImageData() {
 // 載入所有圖片
 async function loadAllImages() {
     try {
-        const response = await fetch('Avatar/');
+        const response = await fetch(getBasePath() + '/Avatar/');
         const text = await response.text();
         
         // 解析HTML來獲取圖片列表
@@ -947,7 +947,7 @@ function openBatchEditModal() {
         Array.from(selectedImages).forEach(filename => {
             const previewItem = document.createElement('div');
             previewItem.className = 'batch-preview-item selected';
-            previewItem.innerHTML = `<img src="Avatar/${filename}" alt="${filename}">`;
+            previewItem.innerHTML = `<img src="${getAvatarPath(filename)}" alt="${filename}">`;
             elements.batchPreviewGrid.appendChild(previewItem);
         });
     }
@@ -1246,7 +1246,7 @@ function renderSearchResults(images) {
         const card = document.createElement('div');
         card.className = 'image-card';
         card.innerHTML = `
-            <img src="Avatar/${encodeURIComponent(filename)}" alt="${filename}" loading="lazy">
+                            <img src="${getAvatarPath(filename)}" alt="${filename}" loading="lazy">
             <button class="download-btn" onclick="downloadImage('${filename}')">
                 <i class="fas fa-download"></i>
             </button>
@@ -1453,7 +1453,7 @@ function renderManageForm(images) {
             </div>
             
             <div class="manage-image-preview-container">
-                <img src="Avatar/${encodeURIComponent(filename)}" alt="${filename}" 
+                <img src="${getAvatarPath(filename)}" alt="${filename}" 
                      class="manage-image-preview" loading="lazy">
                 <div class="manage-image-overlay">
                     <div class="manage-image-info">
@@ -1610,7 +1610,7 @@ function openEditModal(filename) {
     const hasBackground = data.hasBackground || false;
     
     // 設置模態框內容
-    elements.modalImage.src = `Avatar/${encodeURIComponent(filename)}`;
+            elements.modalImage.src = getAvatarPath(filename);
     elements.modalFilename.value = displayName;
     elements.modalTheme.value = theme;
     document.getElementById('modalHasBackground').checked = hasBackground;
@@ -1915,7 +1915,7 @@ function hideLoading() {
 // 下載圖片
 function downloadImage(filename) {
     const link = document.createElement('a');
-    link.href = `Avatar/${encodeURIComponent(filename)}`;
+            link.href = getAvatarPath(filename);
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -1996,7 +1996,7 @@ function openViewModal(filename) {
     const hasBackground = data.hasBackground || false;
     
     // 設置模態框內容
-    elements.viewImage.src = `Avatar/${encodeURIComponent(filename)}`;
+            elements.viewImage.src = getAvatarPath(filename);
     elements.viewDisplayName.textContent = displayName;
     elements.viewTheme.textContent = theme || '無';
     
@@ -2948,7 +2948,7 @@ function exportSearchResults() {
             data.displayName || filename,
             data.theme || '',
             (data.hashtags || []).join(', '),
-            `Avatar/${encodeURIComponent(filename)}`
+            getAvatarPath(filename)
         ]);
     });
 
@@ -2973,6 +2973,42 @@ window.addAccessory = addAccessory;
 window.removeAccessory = removeAccessory;
 window.selectAccessory = selectAccessory;
 window.goToPage = goToPage;
+
+// 動態路徑檢測函數 - 確保在本地和部署環境都能正確工作
+function getBasePath() {
+    // 檢測當前環境
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+    
+    // 本地開發環境
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return '';
+    }
+    
+    // 檢查是否在 GitHub Pages 或 Cloudflare Pages 的子路徑中
+    if (pathname.includes('/avatar-search/')) {
+        return '/avatar-search';
+    }
+    
+    // 其他情況（直接域名部署）
+    return '';
+}
+
+// 獲取圖片路徑的通用函數
+function getImagePath(folder, filename) {
+    const basePath = getBasePath();
+    return `${basePath}/${folder}/${encodeURIComponent(filename)}`;
+}
+
+// 獲取頭貼圖片路徑
+function getAvatarPath(filename) {
+    return getImagePath('Avatar', filename);
+}
+
+// 獲取配件圖片路徑
+function getAccessoryPath(filename) {
+    return getImagePath('Accessories', filename);
+}
 
 // 當 DOM 載入完成後初始化應用程式
 document.addEventListener('DOMContentLoaded', initApp); 

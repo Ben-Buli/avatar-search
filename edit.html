@@ -213,16 +213,16 @@
 
         // 配件資料
         const accessoriesData = [
-            { id: 'frame1', name: '相框1', src: 'Accessories/Frame 427 2.png' },
-            { id: 'frame2', name: '相框2', src: 'Accessories/Frame 462.png' },
-            { id: 'vector1', name: '裝飾1', src: 'Accessories/Vector 31 (3).png' },
-            { id: 'vector2', name: '裝飾2', src: 'Accessories/Vector 7 (1) 1.png' },
-            { id: 'image1', name: '配件1', src: 'Accessories/image (1) 1.png' },
-            { id: 'image2', name: '配件2', src: 'Accessories/image (2) 1.png' },
-            { id: 'earring1', name: '瑪瑙耳環', src: 'Accessories/瑪瑙耳環.png' },
-            { id: 'earring2', name: '瑪瑙耳環2', src: 'Accessories/瑪瑙耳環 (1).png' },
-            { id: 'bag1', name: '藍色情人袋', src: 'Accessories/藍色情人袋.png' },
-            { id: 'bag2', name: '紅色情人袋', src: 'Accessories/紅色情人袋 (1).png' }
+            { id: 'frame1', name: '相框1', src: getAccessoryPath('Frame 427 2.png') },
+            { id: 'frame2', name: '相框2', src: getAccessoryPath('Frame 462.png') },
+            { id: 'vector1', name: '裝飾1', src: getAccessoryPath('Vector 31 (3).png') },
+            { id: 'vector2', name: '裝飾2', src: getAccessoryPath('Vector 7 (1) 1.png') },
+            { id: 'image1', name: '配件1', src: getAccessoryPath('image (1) 1.png') },
+            { id: 'image2', name: '配件2', src: getAccessoryPath('image (2) 1.png') },
+            { id: 'earring1', name: '瑪瑙耳環', src: getAccessoryPath('瑪瑙耳環.png') },
+            { id: 'earring2', name: '瑪瑙耳環2', src: getAccessoryPath('瑪瑙耳環 (1).png') },
+            { id: 'bag1', name: '藍色情人袋', src: getAccessoryPath('藍色情人袋.png') },
+            { id: 'bag2', name: '紅色情人袋', src: getAccessoryPath('紅色情人袋 (1).png') }
         ];
 
         // 頁面載入時初始化
@@ -252,7 +252,7 @@
             // 設置圖片
             const editImage = document.getElementById('editImage');
             if (editImage) {
-                editImage.src = `Avatar/${encodeURIComponent(filename)}`;
+                editImage.src = getAvatarPath(filename);
                 
                 editImage.onload = function() {
                     console.log('圖片載入成功:', filename);
