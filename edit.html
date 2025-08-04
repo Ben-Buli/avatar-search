@@ -58,21 +58,21 @@
             <div class="tool-content active" id="adjustTool">
                 <div class="adjustment-controls">
                     <div class="control-group">
-                        <label>亮度</label>
+                        <label for="brightnessSlider">亮度</label>
                         <div class="slider-container">
                             <input type="range" id="brightnessSlider" min="0" max="200" value="100">
                             <span id="brightnessValue">100%</span>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label>對比度</label>
+                        <label for="contrastSlider">對比度</label>
                         <div class="slider-container">
                             <input type="range" id="contrastSlider" min="0" max="200" value="100">
                             <span id="contrastValue">100%</span>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label>飽和度</label>
+                        <label for="saturationSlider">飽和度</label>
                         <div class="slider-container">
                             <input type="range" id="saturationSlider" min="0" max="200" value="100">
                             <span id="saturationValue">100%</span>
@@ -136,7 +136,7 @@
             <!-- 背景工具 -->
             <div class="tool-content" id="backgroundTool">
                 <div class="background-controls">
-                    <label>背景顏色</label>
+                    <label for="backgroundColorPicker">背景顏色</label>
                     <div class="color-picker-container">
                         <input type="color" id="backgroundColorPicker" value="#ffffff">
                         <button id="resetColorBtn" class="reset-btn">

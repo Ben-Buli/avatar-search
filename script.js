@@ -294,6 +294,7 @@ async function loadImageData() {
 // 載入所有圖片
 async function loadAllImages() {
     try {
+        // 嘗試從伺服器獲取圖片列表（僅在支援目錄列表的環境中有效）
         const response = await fetch(getBasePath() + '/Avatar/');
         const text = await response.text();
         
@@ -308,88 +309,60 @@ async function loadAllImages() {
             .map(filename => decodeURIComponent(filename))
             .sort(); // 按字母順序排序
             
-        console.log(`成功載入 ${allImages.length} 張圖片`);
+        console.log(`成功從伺服器載入 ${allImages.length} 張圖片`);
         
     } catch (error) {
-        console.error('載入圖片列表失敗:', error);
-        // 如果無法從伺服器獲取，使用預設列表
+        console.log('無法從伺服器獲取圖片列表，使用預設列表（GitHub Pages 等靜態託管環境）');
+        // 使用實際存在的圖片檔案列表
         allImages = [
-            '234234234.png',
-            '7a18e69f-d3c8-42ab-8421-f7921a42ce17.png',
-            '7ce85efc-767e-4d6a-9108-dbeff7c6d1ee.png',
-            '7e02e5ec-81c2-4744-8d68-010a76839265.png',
-            '86edb11b-bc15-49f0-863d-268ea39d8bdd.png',
-            'bai.png',
-            'baqi2.png',
-            'buda.png',
-            'buda2.png',
-            'buda3.png',
-            'ca984f06-7e17-4307-b8e0-f42c03d5ffaa.png',
-            'chun2.png',
-            'chunp.png',
-            'd667f703-2a67-4d14-941b-462d5dcfbf83.png',
-            'dfb3c5fa-7333-486b-afb8-053d69583b0d.png',
-            'f46babe7-da72-4aae-9b26-d34ee60fd24d.png',
-            'fang.png',
-            'Frame 349.png',
-            'Frame 350.png',
-            'Frame 351.png',
-            'Frame 352.png',
-            'Frame 353.png',
-            'Frame 354.png',
-            'Frame 357.png',
-            'Frame 358.png',
-            'Frame 359.png',
-            'Frame 360.png',
-            'Frame 363.png',
-            'Frame 364.png',
-            'Frame 365.png',
-            'Frame 366.png',
-            'Frame 367.png',
-            'Frame 368.png',
-            'Frame 369.png',
-            'Frame 370.png',
-            'Frame 372.png',
-            'Frame 380.png',
-            'Frame 386.png',
-            'Frame 391.png',
-            'Frame 393.png',
-            'Frame 394.png',
-            'Frame 395.png',
-            'Frame 396.png',
-            'Frame 397.png',
-            'Frame 398.png',
-            'Frame 400.png',
-            'Frame 404.png',
-            'Frame 405.png',
-            'Frame 406.png',
-            'Frame 407.png',
-            'Frame 408.png',
-            'Frame 410.png',
-            'Frame 412.png',
-            'Frame 415.png',
-            'image 113.png',
-            'image 118.png',
-            'image 119.png',
-            'image 91 (1).png',
-            'imageˋˋˋˋ.png',
-            'image22222.png',
-            'imageumus.png',
-            'imageㄉ2q3.png',
-            'imageㄍ.png',
-            'kalaaay.png',
-            'kalay.png',
-            'mjnpei.png',
-            'Molly.png',
-            'peibudi.png',
-            'rayu.png',
-            'san1.png',
-            'san3.png',
-            'yu-1.png',
-            'ㄑˇ.png'
+            'avatar-1.png', 'avatar-2.png', 'avatar-3.png', 'avatar-4.png', 'avatar-5.png',
+            'avatar-6.png', 'avatar-7.png', 'avatar-8.png', 'avatar-9.png', 'avatar-10.png',
+            'avatar-11.png', 'avatar-12.png', 'avatar-13.png', 'avatar-14.png', 'avatar-15.png',
+            'avatar-16.png', 'avatar-17.png', 'avatar-18.png', 'avatar-19.png', 'avatar-20.png',
+            'avatar-21.png', 'avatar-22.png', 'avatar-23.png', 'avatar-24.png', 'avatar-25.png',
+            'avatar-26.png', 'avatar-27.png', 'avatar-28.png', 'avatar-29.png', 'avatar-30.png',
+            'avatar-31.png', 'avatar-32.png', 'avatar-33.png', 'avatar-34.png', 'avatar-35.png',
+            'avatar-36.png', 'avatar-37.png', 'avatar-38.png', 'avatar-39.png', 'avatar-40.png',
+            'avatar-41.png', 'avatar-42.png', 'avatar-43.png', 'avatar-44.png', 'avatar-45.png',
+            'avatar-46.png', 'avatar-47.png', 'avatar-48.png', 'avatar-49.png', 'avatar-51.png',
+            'avatar-52.png', 'avatar-54.png', 'avatar-55.png', 'avatar-56.png', 'avatar-57.png',
+            'avatar-58.png', 'avatar-59.png', 'avatar-60.png', 'avatar-61.png', 'avatar-62.png',
+            'avatar-63.png', 'avatar-64.png', 'avatar-65.png', 'avatar-66.png', 'avatar-67.png',
+            'avatar-68.png', 'avatar-69.png', 'avatar-70.png', 'avatar-71.png'
         ].sort();
         
         console.log(`使用預設列表載入 ${allImages.length} 張圖片`);
+        
+        // 驗證圖片是否可訪問
+        await validateImages();
+    }
+}
+
+// 驗證圖片是否可訪問
+async function validateImages() {
+    console.log('開始驗證圖片可訪問性...');
+    const validImages = [];
+    const basePath = getBasePath();
+    
+    for (const filename of allImages) {
+        try {
+            const imagePath = `${basePath}/Avatar/${encodeURIComponent(filename)}`;
+            const response = await fetch(imagePath, { method: 'HEAD' });
+            if (response.ok) {
+                validImages.push(filename);
+            } else {
+                console.warn(`圖片無法訪問: ${imagePath}`);
+            }
+        } catch (error) {
+            console.warn(`圖片載入失敗: ${filename}`, error);
+        }
+    }
+    
+    if (validImages.length > 0) {
+        allImages = validImages;
+        console.log(`驗證完成，${validImages.length} 張圖片可正常訪問`);
+    } else {
+        console.error('沒有找到可訪問的圖片，請檢查路徑配置');
     }
 }
 
@@ -2980,22 +2953,41 @@ function getBasePath() {
     const hostname = window.location.hostname;
     const pathname = window.location.pathname;
     
+    console.log('Debug - Hostname:', hostname);
+    console.log('Debug - Pathname:', pathname);
+    
     // 本地開發環境
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('Debug - 檢測到本地環境');
         return '';
     }
     
-    // 檢查是否在 GitHub Pages 或 Cloudflare Pages 的子路徑中
+    // 檢查是否在 GitHub Pages 的子路徑中
     if (pathname.includes('/avatar-search/')) {
+        console.log('Debug - 檢測到 GitHub Pages 子路徑部署');
         return '/avatar-search';
     }
     
     // 檢查是否是 avatar.kebalan.org 域名
     if (hostname === 'avatar.kebalan.org') {
+        console.log('Debug - 檢測到 avatar.kebalan.org 域名');
         return '';
     }
     
-    // 其他情況（直接域名部署）
+    // 檢查是否是 GitHub Pages 的用戶頁面
+    if (hostname.includes('github.io')) {
+        console.log('Debug - 檢測到 GitHub Pages 用戶頁面');
+        // 從路徑中提取用戶名和倉庫名
+        const pathParts = pathname.split('/').filter(part => part);
+        if (pathParts.length >= 2) {
+            const username = pathParts[0];
+            const repoName = pathParts[1];
+            console.log(`Debug - 用戶名: ${username}, 倉庫名: ${repoName}`);
+            return `/${username}/${repoName}`;
+        }
+    }
+    
+    console.log('Debug - 使用預設路徑');
     return '';
 }
 
