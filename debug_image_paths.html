@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖片路徑調試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .image-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .image-item.success {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        .image-item.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .status {
+            margin-top: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .status.success { color: #10b981; }
+        .status.error { color: #ef4444; }
+        .status.loading { color: #f59e0b; }
+        .debug-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <h1>🔍 圖片路徑調試工具</h1>
+    
+    <div class="debug-section">
+        <h2>📋 環境資訊</h2>
+        <div class="debug-info" id="envInfo"></div>
+        <button onclick="showEnvironmentInfo()">重新檢查</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>🛣️ 路徑計算</h2>
+        <div class="debug-info" id="pathInfo"></div>
+        <button onclick="showPathInfo()">重新計算</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>🖼️ 圖片載入測試</h2>
+        <div id="imageTestResults">
+            <p>點擊按鈕開始測試圖片載入...</p>
+        </div>
+        <button onclick="testImages()">測試圖片載入</button>
+        <button onclick="clearResults()">清除結果</button>
+    </div>
+
+    <script>
+        // 環境資訊
+        function showEnvironmentInfo() {
+            const envInfo = document.getElementById('envInfo');
+            const info = {
+                hostname: window.location.hostname,
+                pathname: window.location.pathname,
+                href: window.location.href,
+                origin: window.location.origin,
+                timestamp: new Date().toISOString()
+            };
+            
+            envInfo.textContent = Object.entries(info)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join('\n');
+        }
+        
+        // 路徑資訊
+        function showPathInfo() {
+            const pathInfo = document.getElementById('pathInfo');
+            const basePath = getBasePath();
+            const testPaths = [
+                { name: 'Base Path', path: basePath },
+                { name: 'Avatar Path (avatar-1.png)', path: getAvatarPath('avatar-1.png') },
+                { name: 'Avatar Path (avatar-2.png)', path: getAvatarPath('avatar-2.png') },
+                { name: 'Avatar Path (avatar-3.png)', path: getAvatarPath('avatar-3.png') },
+                { name: 'Full URL (avatar-1.png)', path: window.location.origin + getAvatarPath('avatar-1.png') }
+            ];
+            
+            pathInfo.textContent = testPaths
+                .map(item => `${item.name}: ${item.path}`)
+                .join('\n');
+        }
+        
+        // 測試圖片載入
+        async function testImages() {
+            const resultsDiv = document.getElementById('imageTestResults');
+            resultsDiv.innerHTML = '<div class="image-grid" id="imageGrid"></div>';
+            const imageGrid = document.getElementById('imageGrid');
+            
+            const testImages = [
+                'avatar-1.png', 'avatar-2.png', 'avatar-3.png', 'avatar-4.png', 'avatar-5.png',
+                'avatar-6.png', 'avatar-7.png', 'avatar-8.png', 'avatar-9.png', 'avatar-10.png'
+            ];
+            
+            let successCount = 0;
+            let errorCount = 0;
+            
+            for (const filename of testImages) {
+                const testItem = document.createElement('div');
+                testItem.className = 'image-item';
+                testItem.innerHTML = `
+                    <div>${filename}</div>
+                    <div class="status loading">載入中...</div>
+                `;
+                imageGrid.appendChild(testItem);
+                
+                try {
+                    const imagePath = getAvatarPath(filename);
+                    console.log(`測試圖片: ${imagePath}`);
+                    
+                    const response = await fetch(imagePath, { method: 'HEAD' });
+                    console.log(`回應狀態: ${response.status} ${response.statusText}`);
+                    
+                    if (response.ok) {
+                        testItem.className = 'image-item success';
+                        testItem.innerHTML = `
+                            <img src="${imagePath}" alt="${filename}" onload="this.parentElement.querySelector('.status').textContent='載入成功'">
+                            <div class="status success">載入成功</div>
+                        `;
+                        successCount++;
+                    } else {
+                        testItem.className = 'image-item error';
+                        testItem.innerHTML = `
+                            <div>${filename}</div>
+                            <div class="status error">HTTP ${response.status}</div>
+                        `;
+                        errorCount++;
+                    }
+                } catch (error) {
+                    testItem.className = 'image-item error';
+                    testItem.innerHTML = `
+                        <div>${filename}</div>
+                        <div class="status error">載入失敗</div>
+                    `;
+                    errorCount++;
+                    console.error(`圖片載入錯誤: ${filename}`, error);
+                }
+                
+                // 添加延遲
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+            
+            // 顯示統計
+            const statsDiv = document.createElement('div');
+            statsDiv.style.marginTop = '20px';
+            statsDiv.style.padding = '15px';
+            statsDiv.style.background = '#f8f9fa';
+            statsDiv.style.borderRadius = '4px';
+            statsDiv.innerHTML = `
+                <h3>測試結果</h3>
+                <p>成功: <span style="color: #10b981; font-weight: bold;">${successCount}</span></p>
+                <p>失敗: <span style="color: #ef4444; font-weight: bold;">${errorCount}</span></p>
+                <p>總計: ${testImages.length}</p>
+                <p>成功率: ${((successCount / testImages.length) * 100).toFixed(1)}%</p>
+            `;
+            resultsDiv.appendChild(statsDiv);
+        }
+        
+        // 清除結果
+        function clearResults() {
+            document.getElementById('imageTestResults').innerHTML = '<p>點擊按鈕開始測試圖片載入...</p>';
+        }
+        
+        // 路徑處理函數
+        function getBasePath() {
+            const hostname = window.location.hostname;
+            const pathname = window.location.pathname;
+            
+            console.log('Debug - Hostname:', hostname);
+            console.log('Debug - Pathname:', pathname);
+            
+            // 本地開發環境
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                console.log('Debug - 檢測到本地環境');
+                return '';
+            }
+            
+            // 檢查是否在 GitHub Pages 的子路徑中
+            if (pathname.includes('/avatar-search/')) {
+                console.log('Debug - 檢測到 GitHub Pages 子路徑部署');
+                return '/avatar-search';
+            }
+            
+            // 檢查是否是 avatar.kebalan.org 域名
+            if (hostname === 'avatar.kebalan.org') {
+                console.log('Debug - 檢測到 avatar.kebalan.org 域名');
+                return '';
+            }
+            
+            // 檢查是否是 GitHub Pages 的用戶頁面
+            if (hostname.includes('github.io')) {
+                console.log('Debug - 檢測到 GitHub Pages 用戶頁面');
+                const pathParts = pathname.split('/').filter(part => part);
+                if (pathParts.length >= 2) {
+                    const username = pathParts[0];
+                    const repoName = pathParts[1];
+                    console.log(`Debug - 用戶名: ${username}, 倉庫名: ${repoName}`);
+                    return `/${username}/${repoName}`;
+                }
+            }
+            
+            console.log('Debug - 使用預設路徑');
+            return '';
+        }
+        
+        function getImagePath(folder, filename) {
+            const basePath = getBasePath();
+            return `${basePath}/${folder}/${encodeURIComponent(filename)}`;
+        }
+        
+        function getAvatarPath(filename) {
+            return getImagePath('Avatar', filename);
+        }
+        
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            showEnvironmentInfo();
+            showPathInfo();
+            console.log('圖片路徑調試頁面已載入');
+        });
+    </script>
+</body>
+</html> 

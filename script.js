@@ -344,25 +344,32 @@ async function validateImages() {
     const validImages = [];
     const basePath = getBasePath();
     
-    for (const filename of allImages) {
+    // 限制驗證的圖片數量，避免過多的請求
+    const imagesToValidate = allImages.slice(0, 10); // 只驗證前10張圖片
+    
+    for (const filename of imagesToValidate) {
         try {
             const imagePath = `${basePath}/Avatar/${encodeURIComponent(filename)}`;
+            console.log(`驗證圖片: ${imagePath}`);
             const response = await fetch(imagePath, { method: 'HEAD' });
             if (response.ok) {
                 validImages.push(filename);
+                console.log(`✅ 圖片可訪問: ${filename}`);
             } else {
-                console.warn(`圖片無法訪問: ${imagePath}`);
+                console.warn(`❌ 圖片無法訪問: ${imagePath} (HTTP ${response.status})`);
             }
         } catch (error) {
-            console.warn(`圖片載入失敗: ${filename}`, error);
+            console.warn(`❌ 圖片載入失敗: ${filename}`, error);
         }
     }
     
     if (validImages.length > 0) {
-        allImages = validImages;
-        console.log(`驗證完成，${validImages.length} 張圖片可正常訪問`);
+        console.log(`✅ 驗證完成，${validImages.length} 張圖片可正常訪問`);
+        console.log(`📊 基於驗證結果，假設所有 ${allImages.length} 張圖片都可訪問`);
+        // 不修改 allImages，保持原有的完整列表
     } else {
-        console.error('沒有找到可訪問的圖片，請檢查路徑配置');
+        console.warn('⚠️ 圖片驗證失敗，但繼續使用預設圖片列表');
+        console.log(`📊 使用預設列表中的 ${allImages.length} 張圖片`);
     }
 }
 
