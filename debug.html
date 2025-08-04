@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>調試頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .console-output {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔍 JavaScript 調試頁面</h1>
+        
+        <div id="status" class="status info">
+            準備開始調試...
+        </div>
+        
+        <button onclick="runDebug()">執行調試</button>
+        <button onclick="clearConsole()">清除控制台</button>
+        <button onclick="loadMainScript()">載入主腳本</button>
+        <button onclick="window.open('index.html', '_blank')">開啟主頁面</button>
+        
+        <h3>調試輸出：</h3>
+        <div id="consoleOutput" class="console-output"></div>
+    </div>
+
+    <script>
+        // 捕獲控制台輸出
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const originalConsoleWarn = console.warn;
+        const consoleOutput = document.getElementById('consoleOutput');
+        
+        function addToConsole(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : type === 'warn' ? '#ffd93d' : '#6bcf7f';
+            consoleOutput.innerHTML += `<span style="color: ${color}">[${timestamp}] ${type.toUpperCase()}:</span> ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            addToConsole(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            addToConsole(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalConsoleWarn.apply(console, args);
+            addToConsole(args.join(' '), 'warn');
+        };
+        
+        function clearConsole() {
+            consoleOutput.innerHTML = '';
+        }
+        
+        function runDebug() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在執行調試...';
+            
+            clearConsole();
+            
+            // 載入調試腳本
+            const script = document.createElement('script');
+            script.src = 'debug_script.js';
+            script.onload = () => {
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '調試完成！請查看上方輸出。';
+            };
+            script.onerror = () => {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '調試腳本載入失敗！';
+            };
+            document.head.appendChild(script);
+        }
+        
+        function loadMainScript() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = '正在載入主腳本...';
+            
+            const script = document.createElement('script');
+            script.src = 'script.js';
+            script.onload = () => {
+                statusDiv.className = 'status success';
+                statusDiv.textContent = '主腳本載入成功！現在可以執行調試。';
+                console.log('✅ 主腳本已載入');
+            };
+            script.onerror = () => {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '主腳本載入失敗！';
+                console.error('❌ 主腳本載入失敗');
+            };
+            document.head.appendChild(script);
+        }
+        
+        // 頁面載入時自動載入主腳本
+        window.addEventListener('load', () => {
+            setTimeout(loadMainScript, 500);
+        });
+    </script>
+</body>
+</html> 

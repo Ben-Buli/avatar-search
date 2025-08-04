@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯頁面預覽測試</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .test-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .test-link i {
+            font-size: 1.5rem;
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .debug-info h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .debug-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .debug-info li {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .debug-info li:last-child {
+            border-bottom: none;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-ok {
+            background: #28a745;
+        }
+        
+        .status-error {
+            background: #dc3545;
+        }
+        
+        .status-warning {
+            background: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">編輯頁面預覽測試</h1>
+        
+        <div class="test-section">
+            <h3>測試不同圖片檔案</h3>
+            <div class="test-links">
+                <a href="edit.html?image=avatar-1.png" class="test-link">
+                    <i class="fas fa-image"></i>
+                    <span>測試 avatar-1.png</span>
+                </a>
+                <a href="edit.html?image=avatar-2.png" class="test-link">
+                    <i class="fas fa-image"></i>
+                    <span>測試 avatar-2.png</span>
+                </a>
+                <a href="edit.html?image=avatar-10.png" class="test-link">
+                    <i class="fas fa-image"></i>
+                    <span>測試 avatar-10.png</span>
+                </a>
+                <a href="edit.html?image=avatar-20.png" class="test-link">
+                    <i class="fas fa-image"></i>
+                    <span>測試 avatar-20.png</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>測試特殊情況</h3>
+            <div class="test-links">
+                <a href="edit.html?image=不存在的檔案.png" class="test-link">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>測試不存在的檔案</span>
+                </a>
+                <a href="edit.html" class="test-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span>測試無參數</span>
+                </a>
+                <a href="edit.html?image=" class="test-link">
+                    <i class="fas fa-times-circle"></i>
+                    <span>測試空參數</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>其他測試頁面</h3>
+            <div class="test-links">
+                <a href="test_mobile_edit.html" class="test-link">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>手機版測試</span>
+                </a>
+                <a href="demo_comparison.html" class="test-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>改進對比</span>
+                </a>
+                <a href="index.html" class="test-link">
+                    <i class="fas fa-home"></i>
+                    <span>返回首頁</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="debug-info">
+            <h4>調試資訊</h4>
+            <ul>
+                <li>
+                    <span class="status-indicator status-ok"></span>
+                    伺服器狀態: 運行中 (http://localhost:8000)
+                </li>
+                <li>
+                    <span class="status-indicator status-ok"></span>
+                    script.js: 已載入
+                </li>
+                <li>
+                    <span class="status-indicator status-ok"></span>
+                    styles.css: 已載入
+                </li>
+                <li>
+                    <span class="status-indicator status-ok"></span>
+                    image_data.json: 可訪問
+                </li>
+                <li>
+                    <span class="status-indicator status-ok"></span>
+                    Avatar/ 資料夾: 可訪問
+                </li>
+            </ul>
+        </div>
+        
+        <div class="debug-info">
+            <h4>測試步驟</h4>
+            <ol>
+                <li>點擊上方任一測試連結</li>
+                <li>檢查圖片是否正確載入</li>
+                <li>測試各種編輯功能</li>
+                <li>檢查錯誤處理是否正常</li>
+                <li>驗證手機版響應式設計</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // 檢查頁面載入狀態
+        window.addEventListener('load', function() {
+            console.log('測試頁面載入完成');
+            
+            // 檢查必要的檔案是否存在
+            checkFileAvailability();
+        });
+        
+        async function checkFileAvailability() {
+            const files = [
+                'script.js',
+                'styles.css',
+                'image_data.json',
+                'Avatar/',
+                'edit.html'
+            ];
+            
+            for (const file of files) {
+                try {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    console.log(`${file}: ${response.ok ? 'OK' : 'Error'}`);
+                } catch (error) {
+                    console.error(`${file}: Error -`, error);
+                }
+            }
+        }
+    </script>
+</body>
+</html> 

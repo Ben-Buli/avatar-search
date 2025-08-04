@@ -1,0 +1,662 @@
+{
+  "avatar-1.png": {
+    "hashtags": [
+      "PEI"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI頭貼_001",
+    "originalFilename": "avatar-1.png",
+    "hasBackground": false
+  },
+  "avatar-2.png": {
+    "hashtags": [
+      "馬鈴薯"
+    ],
+    "theme": "夏令營",
+    "displayName": "馬鈴薯夏令營_002",
+    "originalFilename": "avatar-2.png",
+    "hasBackground": false
+  },
+  "avatar-3.png": {
+    "hashtags": [
+      "Hani"
+    ],
+    "theme": "夏令營",
+    "displayName": "Hani夏令營_003",
+    "originalFilename": "avatar-3.png",
+    "hasBackground": false
+  },
+  "avatar-4.png": {
+    "hashtags": [
+      "章魚"
+    ],
+    "theme": "夏令營",
+    "displayName": "章魚夏令營_004",
+    "originalFilename": "avatar-4.png",
+    "hasBackground": false
+  },
+  "avatar-5.png": {
+    "hashtags": [
+      "zawen"
+    ],
+    "theme": "Zawen系列",
+    "displayName": "zawen頭貼_005",
+    "originalFilename": "avatar-5.png",
+    "hasBackground": false
+  },
+  "avatar-6.png": {
+    "hashtags": [
+      "qasup",
+      "冰箱"
+    ],
+    "theme": "Qasup系列",
+    "displayName": "qasup冰箱_006",
+    "originalFilename": "avatar-6.png",
+    "hasBackground": false
+  },
+  "avatar-7.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_007",
+    "originalFilename": "avatar-7.png",
+    "hasBackground": false
+  },
+  "avatar-8.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_008",
+    "originalFilename": "avatar-8.png",
+    "hasBackground": false
+  },
+  "avatar-9.png": {
+    "hashtags": [
+      "abang"
+    ],
+    "theme": "Abang系列",
+    "displayName": "abang頭貼_009",
+    "originalFilename": "avatar-9.png",
+    "hasBackground": false
+  },
+  "avatar-10.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_010",
+    "originalFilename": "avatar-10.png",
+    "hasBackground": false
+  },
+  "avatar-11.png": {
+    "hashtags": [
+      "PEI"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI頭貼_011",
+    "originalFilename": "avatar-11.png",
+    "hasBackground": false
+  },
+  "avatar-12.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_012",
+    "originalFilename": "avatar-12.png",
+    "hasBackground": false
+  },
+  "avatar-13.png": {
+    "hashtags": [
+      "simau"
+    ],
+    "theme": "Simau系列",
+    "displayName": "simau頭貼_013",
+    "originalFilename": "avatar-13.png",
+    "hasBackground": false
+  },
+  "avatar-14.png": {
+    "hashtags": [
+      "阿嬤"
+    ],
+    "theme": "家庭系列",
+    "displayName": "阿嬤頭貼_014",
+    "originalFilename": "avatar-14.png",
+    "hasBackground": false
+  },
+  "avatar-15.png": {
+    "hashtags": [
+      "阿公"
+    ],
+    "theme": "家庭系列",
+    "displayName": "阿公頭貼_015",
+    "originalFilename": "avatar-15.png",
+    "hasBackground": false
+  },
+  "avatar-16.png": {
+    "hashtags": [
+      "budi"
+    ],
+    "theme": "Budi系列",
+    "displayName": "budi頭貼_016",
+    "originalFilename": "avatar-16.png",
+    "hasBackground": false
+  },
+  "avatar-17.png": {
+    "hashtags": [
+      "budi"
+    ],
+    "theme": "Budi系列",
+    "displayName": "budi頭貼_017",
+    "originalFilename": "avatar-17.png",
+    "hasBackground": false
+  },
+  "avatar-18.png": {
+    "hashtags": [
+      "simau"
+    ],
+    "theme": "Simau系列",
+    "displayName": "simau頭貼_018",
+    "originalFilename": "avatar-18.png",
+    "hasBackground": false
+  },
+  "avatar-19.png": {
+    "hashtags": [
+      "PEI"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI頭貼_019",
+    "originalFilename": "avatar-19.png",
+    "hasBackground": false
+  },
+  "avatar-20.png": {
+    "hashtags": [
+      "zawen"
+    ],
+    "theme": "Zawen系列",
+    "displayName": "zawen頭貼_020",
+    "originalFilename": "avatar-20.png",
+    "hasBackground": false
+  },
+  "avatar-21.png": {
+    "hashtags": [
+      "api",
+      "MJ"
+    ],
+    "theme": "API系列",
+    "displayName": "API_MJ頭貼_021",
+    "originalFilename": "avatar-21.png",
+    "hasBackground": false
+  },
+  "avatar-22.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_022",
+    "originalFilename": "avatar-22.png",
+    "hasBackground": false
+  },
+  "avatar-23.png": {
+    "hashtags": [
+      "buli"
+    ],
+    "theme": "Buli系列",
+    "displayName": "buli頭貼_023",
+    "originalFilename": "avatar-23.png",
+    "hasBackground": false
+  },
+  "avatar-24.png": {
+    "hashtags": [
+      "ipay"
+    ],
+    "theme": "iPay系列",
+    "displayName": "ipay頭貼_024",
+    "originalFilename": "avatar-24.png",
+    "hasBackground": false
+  },
+  "avatar-25.png": {
+    "hashtags": [
+      "female",
+      "wani"
+    ],
+    "theme": "Wani系列",
+    "displayName": "女性wani頭貼_025",
+    "originalFilename": "avatar-25.png",
+    "hasBackground": false
+  },
+  "avatar-26.png": {
+    "hashtags": [
+      "amiq"
+    ],
+    "theme": "Amiq系列",
+    "displayName": "amiq頭貼_026",
+    "originalFilename": "avatar-26.png",
+    "hasBackground": false
+  },
+  "avatar-27.png": {
+    "hashtags": [
+      "buli"
+    ],
+    "theme": "Buli系列",
+    "displayName": "buli頭貼_027",
+    "originalFilename": "avatar-27.png",
+    "hasBackground": false
+  },
+  "avatar-28.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_028",
+    "originalFilename": "avatar-28.png",
+    "hasBackground": false
+  },
+  "avatar-29.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_029",
+    "originalFilename": "avatar-29.png",
+    "hasBackground": false
+  },
+  "avatar-30.png": {
+    "hashtags": [
+      "PEI"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI頭貼_030",
+    "originalFilename": "avatar-30.png",
+    "hasBackground": false
+  },
+  "avatar-31.png": {
+    "hashtags": [
+      "wani"
+    ],
+    "theme": "Wani系列",
+    "displayName": "wani頭貼_031",
+    "originalFilename": "avatar-31.png",
+    "hasBackground": false
+  },
+  "avatar-32.png": {
+    "hashtags": [
+      "kebalan"
+    ],
+    "theme": "Kebalan系列",
+    "displayName": "kebalan頭貼_032",
+    "originalFilename": "avatar-32.png",
+    "hasBackground": false
+  },
+  "avatar-33.png": {
+    "hashtags": [
+      "api",
+      "MJ"
+    ],
+    "theme": "API系列",
+    "displayName": "API_MJ頭貼_033",
+    "originalFilename": "avatar-33.png",
+    "hasBackground": false
+  },
+  "avatar-34.png": {
+    "hashtags": [
+      "tuwaq",
+      "kebalan"
+    ],
+    "theme": "Kebalan系列",
+    "displayName": "tuwaq_kebalan_034",
+    "originalFilename": "avatar-34.png",
+    "hasBackground": false
+  },
+  "avatar-35.png": {
+    "hashtags": [
+      "kebalan"
+    ],
+    "theme": "Kebalan系列",
+    "displayName": "kebalan頭貼_035",
+    "originalFilename": "avatar-35.png",
+    "hasBackground": false
+  },
+  "avatar-36.png": {
+    "hashtags": [
+      "kebalan"
+    ],
+    "theme": "Kebalan系列",
+    "displayName": "kebalan頭貼_036",
+    "originalFilename": "avatar-36.png",
+    "hasBackground": false
+  },
+  "avatar-37.png": {
+    "hashtags": [
+      "buli"
+    ],
+    "theme": "Buli系列",
+    "displayName": "buli頭貼_037",
+    "originalFilename": "avatar-37.png",
+    "hasBackground": false
+  },
+  "avatar-38.png": {
+    "hashtags": [
+      "qasup",
+      "冰箱"
+    ],
+    "theme": "Qasup系列",
+    "displayName": "qasup冰箱_038",
+    "originalFilename": "avatar-38.png",
+    "hasBackground": false
+  },
+  "avatar-39.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_039",
+    "originalFilename": "avatar-39.png",
+    "hasBackground": false
+  },
+  "avatar-40.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_040",
+    "originalFilename": "avatar-40.png",
+    "hasBackground": true
+  },
+  "avatar-41.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_041",
+    "originalFilename": "avatar-41.png",
+    "hasBackground": false
+  },
+  "avatar-42.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_042",
+    "originalFilename": "avatar-42.png",
+    "hasBackground": false
+  },
+  "avatar-43.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_043",
+    "originalFilename": "avatar-43.png",
+    "hasBackground": false
+  },
+  "avatar-44.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_044",
+    "originalFilename": "avatar-44.png",
+    "hasBackground": false
+  },
+  "avatar-45.png": {
+    "hashtags": [
+      "PEI",
+      "api",
+      "MJ"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI_API頭貼_045",
+    "originalFilename": "avatar-45.png",
+    "hasBackground": false
+  },
+  "avatar-46.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_046",
+    "originalFilename": "avatar-46.png",
+    "hasBackground": false
+  },
+  "avatar-47.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_047",
+    "originalFilename": "avatar-47.png",
+    "hasBackground": false
+  },
+  "avatar-48.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_048",
+    "originalFilename": "avatar-48.png",
+    "hasBackground": false
+  },
+  "avatar-49.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_049",
+    "originalFilename": "avatar-49.png",
+    "hasBackground": false
+  },
+  "avatar-50.png": {
+    "hashtags": [
+      "male"
+    ],
+    "theme": "性別系列",
+    "displayName": "男性頭貼_050",
+    "originalFilename": "avatar-50.png",
+    "hasBackground": false
+  },
+  "avatar-51.png": {
+    "hashtags": [
+      "api",
+      "MJ"
+    ],
+    "theme": "API系列",
+    "displayName": "API_MJ頭貼_051",
+    "originalFilename": "avatar-51.png",
+    "hasBackground": false
+  },
+  "avatar-52.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_052",
+    "originalFilename": "avatar-52.png",
+    "hasBackground": false
+  },
+  "avatar-53.png": {
+    "hashtags": [
+      "ipay"
+    ],
+    "theme": "iPay系列",
+    "displayName": "iPay頭貼_053",
+    "originalFilename": "avatar-53.png",
+    "hasBackground": false
+  },
+  "avatar-54.png": {
+    "hashtags": [
+      "male"
+    ],
+    "theme": "性別系列",
+    "displayName": "男性頭貼_054",
+    "originalFilename": "avatar-54.png",
+    "hasBackground": false
+  },
+  "avatar-55.png": {
+    "hashtags": [
+      "wani",
+      "female"
+    ],
+    "theme": "Default系列",
+    "displayName": "wani女性頭貼_055",
+    "originalFilename": "avatar-55.png",
+    "hasBackground": false
+  },
+  "avatar-56.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_056",
+    "originalFilename": "avatar-56.png",
+    "hasBackground": false
+  },
+  "avatar-57.png": {
+    "hashtags": [
+      "wani"
+    ],
+    "theme": "Wani系列",
+    "displayName": "wani頭貼_057",
+    "originalFilename": "avatar-57.png",
+    "hasBackground": false
+  },
+  "avatar-58.png": {
+    "hashtags": [
+      "kebalan"
+    ],
+    "theme": "Kebalan系列",
+    "displayName": "kebalan頭貼_058",
+    "originalFilename": "avatar-58.png",
+    "hasBackground": false
+  },
+  "avatar-59.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_059",
+    "originalFilename": "avatar-59.png",
+    "hasBackground": false
+  },
+  "avatar-60.png": {
+    "hashtags": [
+      "qasup",
+      "冰箱"
+    ],
+    "theme": "Qasup系列",
+    "displayName": "qasup冰箱_060",
+    "originalFilename": "avatar-60.png",
+    "hasBackground": false
+  },
+  "avatar-61.png": {
+    "hashtags": [
+      "default"
+    ],
+    "theme": "預設系列",
+    "displayName": "預設頭貼_061",
+    "originalFilename": "avatar-61.png",
+    "hasBackground": false
+  },
+  "avatar-62.png": {
+    "hashtags": [
+      "zawen"
+    ],
+    "theme": "Zawen系列",
+    "displayName": "zawen頭貼_062",
+    "originalFilename": "avatar-62.png",
+    "hasBackground": false
+  },
+  "avatar-63.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_063",
+    "originalFilename": "avatar-63.png",
+    "hasBackground": true
+  },
+  "avatar-64.png": {
+    "hashtags": [
+      "PEI",
+      "Budi"
+    ],
+    "theme": "PEI系列",
+    "displayName": "PEI_Budi頭貼_064",
+    "originalFilename": "avatar-64.png",
+    "hasBackground": true
+  },
+  "avatar-65.png": {
+    "hashtags": [
+      "kalay"
+    ],
+    "theme": "Kalay系列",
+    "displayName": "kalay頭貼_065",
+    "originalFilename": "avatar-65.png",
+    "hasBackground": false
+  },
+  "avatar-66.png": {
+    "hashtags": [
+      "api",
+      "MJ"
+    ],
+    "theme": "API系列",
+    "displayName": "API_MJ頭貼_066",
+    "originalFilename": "avatar-66.png",
+    "hasBackground": false
+  },
+  "avatar-67.png": {
+    "hashtags": [
+      "Molly",
+      "umus"
+    ],
+    "theme": "Molly系列",
+    "displayName": "Molly頭貼_067",
+    "originalFilename": "avatar-67.png",
+    "hasBackground": false
+  },
+  "avatar-68.png": {
+    "hashtags": [
+      "qasup",
+      "冰箱"
+    ],
+    "theme": "Qasup系列",
+    "displayName": "qasup冰箱_068",
+    "originalFilename": "avatar-68.png",
+    "hasBackground": false
+  },
+  "avatar-69.png": {
+    "hashtags": [
+      "Lowking"
+    ],
+    "theme": "夏令營",
+    "displayName": "Lowking夏令營_069",
+    "originalFilename": "avatar-69.png",
+    "hasBackground": false
+  },
+  "avatar-70.png": {
+    "hashtags": [
+      "yukan"
+    ],
+    "theme": "夏令營",
+    "displayName": "yukan夏令營_070",
+    "originalFilename": "avatar-70.png",
+    "hasBackground": false
+  },
+  "avatar-71.png": {
+    "hashtags": [
+      "cookie"
+    ],
+    "theme": "夏令營",
+    "displayName": "cookie夏令營_071",
+    "originalFilename": "avatar-71.png",
+    "hasBackground": false
+  }
+} 

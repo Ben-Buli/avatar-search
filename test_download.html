@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下載功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-image {
+            max-width: 300px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .test-controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .test-controls label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+        }
+        .test-controls input[type="range"] {
+            width: 200px;
+            margin-right: 10px;
+        }
+        .test-controls button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-controls button:hover {
+            background: #0056b3;
+        }
+        .test-controls button.danger {
+            background: #dc3545;
+        }
+        .test-controls button.danger:hover {
+            background: #c82333;
+        }
+        .test-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .test-info h3 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+        .test-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .test-info li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>下載功能測試</h1>
+    
+    <div class="test-info">
+        <h3>測試目標</h3>
+        <ul>
+            <li>✅ 保持原圖畫質</li>
+            <li>✅ 按照原本尺寸比例</li>
+            <li>✅ 不在背後加背景圖層（除非圖片本身有背景）</li>
+            <li>✅ 正確處理背景顏色設置</li>
+            <li>✅ 正確應用編輯效果（亮度、對比度、飽和度、旋轉、翻轉）</li>
+        </ul>
+    </div>
+
+    <div class="test-container">
+        <h2>測試圖片</h2>
+        <img id="testImage" class="test-image" src="Avatar/avatar-1.png" alt="測試圖片">
+        
+        <div class="test-controls">
+            <h3>編輯控制項</h3>
+            
+            <label>亮度: <span id="brightnessValue">100%</span></label>
+            <input type="range" id="brightnessSlider" min="0" max="200" value="100">
+            
+            <label>對比度: <span id="contrastValue">100%</span></label>
+            <input type="range" id="contrastSlider" min="0" max="200" value="100">
+            
+            <label>飽和度: <span id="saturationValue">100%</span></label>
+            <input type="range" id="saturationSlider" min="0" max="200" value="100">
+            
+            <br><br>
+            
+            <button id="rotateBtn">旋轉90°</button>
+            <button id="flipHBtn">水平翻轉</button>
+            <button id="flipVBtn">垂直翻轉</button>
+            <button id="resetBtn" class="danger">重置所有</button>
+            
+            <br><br>
+            
+            <label>背景顏色:</label>
+            <input type="color" id="bgColorPicker" value="#ffffff">
+            <button id="resetColorBtn">重置顏色</button>
+            
+            <br><br>
+            
+            <button id="downloadBtn" style="background: #28a745; font-size: 16px; padding: 15px 30px;">
+                📥 下載編輯後的圖片
+            </button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>測試結果</h2>
+        <div id="testResults">
+            <p>點擊下載按鈕來測試功能...</p>
+        </div>
+    </div>
+
+    <script>
+        // 模擬 imageEditState
+        let imageEditState = {
+            brightness: 100,
+            contrast: 100,
+            saturation: 100,
+            flipHorizontal: false,
+            flipVertical: false,
+            rotation: 0,
+            cropData: null
+        };
+
+        // 模擬 imageData
+        let imageData = {
+            'avatar-1.png': {
+                displayName: '測試頭貼',
+                theme: '測試',
+                hashtags: ['測試', '頭貼'],
+                hasBackground: false
+            }
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initTestControls();
+            updateImageFilters();
+        });
+
+        function initTestControls() {
+            // 亮度控制
+            document.getElementById('brightnessSlider').addEventListener('input', function() {
+                imageEditState.brightness = parseInt(this.value);
+                document.getElementById('brightnessValue').textContent = this.value + '%';
+                updateImageFilters();
+            });
+
+            // 對比度控制
+            document.getElementById('contrastSlider').addEventListener('input', function() {
+                imageEditState.contrast = parseInt(this.value);
+                document.getElementById('contrastValue').textContent = this.value + '%';
+                updateImageFilters();
+            });
+
+            // 飽和度控制
+            document.getElementById('saturationSlider').addEventListener('input', function() {
+                imageEditState.saturation = parseInt(this.value);
+                document.getElementById('saturationValue').textContent = this.value + '%';
+                updateImageFilters();
+            });
+
+            // 旋轉控制
+            document.getElementById('rotateBtn').addEventListener('click', function() {
+                imageEditState.rotation = (imageEditState.rotation + 90) % 360;
+                updateImageFilters();
+            });
+
+            // 翻轉控制
+            document.getElementById('flipHBtn').addEventListener('click', function() {
+                imageEditState.flipHorizontal = !imageEditState.flipHorizontal;
+                updateImageFilters();
+            });
+
+            document.getElementById('flipVBtn').addEventListener('click', function() {
+                imageEditState.flipVertical = !imageEditState.flipVertical;
+                updateImageFilters();
+            });
+
+            // 重置控制
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                resetAllEdits();
+            });
+
+            // 背景顏色控制
+            document.getElementById('bgColorPicker').addEventListener('input', function() {
+                updateImageFilters();
+            });
+
+            document.getElementById('resetColorBtn').addEventListener('click', function() {
+                document.getElementById('bgColorPicker').value = '#ffffff';
+                updateImageFilters();
+            });
+
+            // 下載控制
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                downloadTestImage();
+            });
+        }
+
+        function updateImageFilters() {
+            const img = document.getElementById('testImage');
+            const filters = [];
+            
+            // 亮度
+            if (imageEditState.brightness !== 100) {
+                filters.push(`brightness(${imageEditState.brightness}%)`);
+            }
+            
+            // 對比度
+            if (imageEditState.contrast !== 100) {
+                filters.push(`contrast(${imageEditState.contrast}%)`);
+            }
+            
+            // 飽和度
+            if (imageEditState.saturation !== 100) {
+                filters.push(`saturate(${imageEditState.saturation}%)`);
+            }
+            
+            // 翻轉
+            if (imageEditState.flipHorizontal) {
+                filters.push('scaleX(-1)');
+            }
+            if (imageEditState.flipVertical) {
+                filters.push('scaleY(-1)');
+            }
+            
+            // 旋轉
+            if (imageEditState.rotation !== 0) {
+                filters.push(`rotate(${imageEditState.rotation}deg)`);
+            }
+            
+            img.style.filter = filters.join(' ');
+        }
+
+        function resetAllEdits() {
+            imageEditState = {
+                brightness: 100,
+                contrast: 100,
+                saturation: 100,
+                flipHorizontal: false,
+                flipVertical: false,
+                rotation: 0,
+                cropData: null
+            };
+            
+            document.getElementById('brightnessSlider').value = 100;
+            document.getElementById('contrastSlider').value = 100;
+            document.getElementById('saturationSlider').value = 100;
+            document.getElementById('brightnessValue').textContent = '100%';
+            document.getElementById('contrastValue').textContent = '100%';
+            document.getElementById('saturationValue').textContent = '100%';
+            document.getElementById('bgColorPicker').value = '#ffffff';
+            
+            updateImageFilters();
+            
+            document.getElementById('testResults').innerHTML = '<p style="color: green;">✅ 所有編輯已重置</p>';
+        }
+
+        function downloadTestImage() {
+            try {
+                const img = document.getElementById('testImage');
+                const backgroundColor = document.getElementById('bgColorPicker').value;
+                const data = imageData['avatar-1.png'] || {};
+                const hasBackground = data.hasBackground || false;
+
+                // 創建 canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 計算最終尺寸（考慮旋轉）
+                let finalWidth = img.naturalWidth;
+                let finalHeight = img.naturalHeight;
+                
+                if (imageEditState.rotation === 90 || imageEditState.rotation === 270) {
+                    [finalWidth, finalHeight] = [finalHeight, finalWidth];
+                }
+                
+                // 設置 canvas 尺寸為原圖的實際尺寸
+                canvas.width = finalWidth;
+                canvas.height = finalHeight;
+                
+                // 根據是否有背景來決定是否繪製背景
+                if (!hasBackground) {
+                    // 沒有背景的圖片繪製背景顏色
+                    ctx.fillStyle = backgroundColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                // 保存當前狀態
+                ctx.save();
+                
+                // 移動到畫布中心
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                
+                // 應用旋轉
+                if (imageEditState.rotation !== 0) {
+                    ctx.rotate(imageEditState.rotation * Math.PI / 180);
+                }
+                
+                // 應用翻轉
+                let scaleX = imageEditState.flipHorizontal ? -1 : 1;
+                let scaleY = imageEditState.flipVertical ? -1 : 1;
+                ctx.scale(scaleX, scaleY);
+                
+                // 繪製圖片（保持原圖畫質）
+                ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
+                
+                // 恢復狀態
+                ctx.restore();
+                
+                // 應用亮度、對比度、飽和度（使用像素級調整）
+                if (imageEditState.brightness !== 100 || imageEditState.contrast !== 100 || imageEditState.saturation !== 100) {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    for (let i = 0; i < data.length; i += 4) {
+                        // 亮度調整
+                        if (imageEditState.brightness !== 100) {
+                            const factor = imageEditState.brightness / 100;
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor)); // G
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor)); // B
+                        }
+                        
+                        // 對比度調整
+                        if (imageEditState.contrast !== 100) {
+                            const factor = (imageEditState.contrast + 100) / 100;
+                            const offset = 128 * (1 - factor);
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor + offset));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor + offset)); // G
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor + offset)); // B
+                        }
+                        
+                        // 飽和度調整（簡化版本）
+                        if (imageEditState.saturation !== 100) {
+                            const factor = imageEditState.saturation / 100;
+                            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                            data[i] = Math.min(255, Math.max(0, gray + factor * (data[i] - gray)));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, gray + factor * (data[i + 1] - gray))); // G
+                            data[i + 2] = Math.min(255, Math.max(0, gray + factor * (data[i + 2] - gray))); // B
+                        }
+                    }
+                    
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                
+                // 轉換為 blob 並下載
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `test_edited_avatar_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    document.getElementById('testResults').innerHTML = `
+                        <p style="color: green;">✅ 圖片下載成功！</p>
+                        <p><strong>下載資訊：</strong></p>
+                        <ul>
+                            <li>原始尺寸: ${img.naturalWidth} x ${img.naturalHeight}</li>
+                            <li>輸出尺寸: ${canvas.width} x ${canvas.height}</li>
+                            <li>背景處理: ${hasBackground ? '保持原背景' : '添加背景色 ' + backgroundColor}</li>
+                            <li>編輯效果: 亮度${imageEditState.brightness}%, 對比度${imageEditState.contrast}%, 飽和度${imageEditState.saturation}%</li>
+                            <li>旋轉: ${imageEditState.rotation}°</li>
+                            <li>翻轉: ${imageEditState.flipHorizontal ? '水平' : ''}${imageEditState.flipVertical ? '垂直' : ''}${!imageEditState.flipHorizontal && !imageEditState.flipVertical ? '無' : ''}</li>
+                        </ul>
+                    `;
+                }, 'image/png', 1.0); // 使用最高品質
+                
+            } catch (error) {
+                console.error('下載圖片失敗:', error);
+                document.getElementById('testResults').innerHTML = `<p style="color: red;">❌ 下載失敗: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html> 

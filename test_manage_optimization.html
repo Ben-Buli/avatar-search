@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理頁面優化測試 - 社群頭貼搜尋系統</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, #f3f1ff 25%, #f5f5f5 50%, #f0fdfa 75%, #fff8f0 100%);
+            background-attachment: fixed;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .optimization-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .optimization-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .optimization-card h4 {
+            color: #8b5cf6;
+            margin-bottom: 0.5rem;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .demo-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .demo-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        .demo-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b5cf6;
+        }
+        .demo-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .demo-edit-btn {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #8b5cf6;
+            font-size: 0.8rem;
+        }
+        .demo-edit-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-1px);
+        }
+        .demo-preview-container {
+            position: relative;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .demo-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            display: block;
+        }
+        .demo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 0.5rem;
+            color: white;
+            font-size: 0.75rem;
+        }
+        .demo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .demo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+        .demo-tag {
+            background: rgba(139, 92, 246, 0.8);
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        .demo-theme {
+            background: rgba(16, 185, 129, 0.8);
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        .demo-form-compact {
+            margin-bottom: 1rem;
+        }
+        .demo-form-group {
+            margin-bottom: 0.75rem;
+        }
+        .demo-form-group label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+        .demo-form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid rgba(225, 229, 233, 0.8);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        .demo-form-input:focus {
+            outline: none;
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        .demo-form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .demo-form-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b5cf6;
+        }
+        .demo-form-checkbox label {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 管理頁面優化測試</h1>
+    
+    <div class="test-section">
+        <h2>📋 優化內容</h2>
+        <div class="optimization-grid">
+            <div class="optimization-card">
+                <h4>🖼️ 圖片預覽優化</h4>
+                <ul>
+                    <li>圖片高度從 150px 縮小到 120px</li>
+                    <li>添加圖片資訊覆蓋層</li>
+                    <li>顯示標籤和主題預覽</li>
+                    <li>支援多標籤顯示（最多3個）</li>
+                </ul>
+            </div>
+            <div class="optimization-card">
+                <h4>📝 表單簡化</h4>
+                <ul>
+                    <li>緊湊的表單佈局</li>
+                    <li>更小的輸入框和標籤</li>
+                    <li>減少間距和邊距</li>
+                    <li>優化的字體大小</li>
+                </ul>
+            </div>
+            <div class="optimization-card">
+                <h4>🎯 操作優化</h4>
+                <ul>
+                    <li>添加編輯按鈕</li>
+                    <li>改進的選中狀態</li>
+                    <li>更好的視覺反饋</li>
+                    <li>響應式設計優化</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎨 優化效果展示</h2>
+        <div class="status info">
+            <h4>優化前後對比：</h4>
+            <p><strong>優化前：</strong> 圖片較大，表單佔用空間多，操作不夠直觀</p>
+            <p><strong>優化後：</strong> 緊湊的預覽圖，簡化的表單，清晰的視覺層次</p>
+        </div>
+        
+        <div class="demo-grid">
+            <!-- 示例卡片 1 -->
+            <div class="demo-card">
+                <div class="demo-header">
+                    <div class="demo-checkbox-wrapper">
+                        <input type="checkbox" class="demo-checkbox" checked>
+                        <span class="demo-name">測試頭貼_001</span>
+                    </div>
+                    <button class="demo-edit-btn" title="編輯詳細資訊">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <div class="demo-preview-container">
+                    <img src="Avatar/234234234.png" alt="測試圖片" class="demo-preview" loading="lazy">
+                    <div class="demo-overlay">
+                        <div class="demo-info">
+                            <div class="demo-tags">
+                                <span class="demo-tag">測試</span>
+                                <span class="demo-tag">頭貼</span>
+                                <span class="demo-tag">範例</span>
+                            </div>
+                            <div class="demo-theme">測試主題</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-form-compact">
+                    <div class="demo-form-group">
+                        <label>顯示名稱:</label>
+                        <input type="text" class="demo-form-input" value="測試頭貼_001" placeholder="輸入顯示名稱">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>標籤:</label>
+                        <input type="text" class="demo-form-input" value="測試, 頭貼, 範例" placeholder="標籤1, 標籤2, 標籤3">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>主題:</label>
+                        <input type="text" class="demo-form-input" value="測試主題" placeholder="輸入主題">
+                    </div>
+                    
+                    <div class="demo-form-checkbox">
+                        <input type="checkbox" checked>
+                        <label>已有背景</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 示例卡片 2 -->
+            <div class="demo-card">
+                <div class="demo-header">
+                    <div class="demo-checkbox-wrapper">
+                        <input type="checkbox" class="demo-checkbox">
+                        <span class="demo-name">圖片範例_002</span>
+                    </div>
+                    <button class="demo-edit-btn" title="編輯詳細資訊">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <div class="demo-preview-container">
+                    <img src="Avatar/image 91 (1).png" alt="測試圖片" class="demo-preview" loading="lazy">
+                    <div class="demo-overlay">
+                        <div class="demo-info">
+                            <div class="demo-tags">
+                                <span class="demo-tag">圖片</span>
+                                <span class="demo-tag">範例</span>
+                            </div>
+                            <div class="demo-theme">範例主題</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-form-compact">
+                    <div class="demo-form-group">
+                        <label>顯示名稱:</label>
+                        <input type="text" class="demo-form-input" value="圖片範例_002" placeholder="輸入顯示名稱">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>標籤:</label>
+                        <input type="text" class="demo-form-input" value="圖片, 範例" placeholder="標籤1, 標籤2, 標籤3">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>主題:</label>
+                        <input type="text" class="demo-form-input" value="範例主題" placeholder="輸入主題">
+                    </div>
+                    
+                    <div class="demo-form-checkbox">
+                        <input type="checkbox">
+                        <label>已有背景</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 示例卡片 3 -->
+            <div class="demo-card">
+                <div class="demo-header">
+                    <div class="demo-checkbox-wrapper">
+                        <input type="checkbox" class="demo-checkbox">
+                        <span class="demo-name">特殊字元_003</span>
+                    </div>
+                    <button class="demo-edit-btn" title="編輯詳細資訊">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                
+                <div class="demo-preview-container">
+                    <img src="Avatar/ㄑˇ.png" alt="測試圖片" class="demo-preview" loading="lazy">
+                    <div class="demo-overlay">
+                        <div class="demo-info">
+                            <div class="demo-tags">
+                                <span class="demo-tag">特殊字元</span>
+                            </div>
+                            <div class="demo-theme">特殊主題</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-form-compact">
+                    <div class="demo-form-group">
+                        <label>顯示名稱:</label>
+                        <input type="text" class="demo-form-input" value="特殊字元_003" placeholder="輸入顯示名稱">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>標籤:</label>
+                        <input type="text" class="demo-form-input" value="特殊字元" placeholder="標籤1, 標籤2, 標籤3">
+                    </div>
+                    
+                    <div class="demo-form-group">
+                        <label>主題:</label>
+                        <input type="text" class="demo-form-input" value="特殊主題" placeholder="輸入主題">
+                    </div>
+                    
+                    <div class="demo-form-checkbox">
+                        <input type="checkbox" checked>
+                        <label>已有背景</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 快速連結</h2>
+        <button class="test-button" onclick="window.open('index.html', '_blank')">開啟主系統</button>
+        <button class="test-button" onclick="window.open('test_new_features.html', '_blank')">新功能測試</button>
+        <button class="test-button" onclick="window.open('test_fix.html', '_blank')">錯誤修復測試</button>
+    </div>
+
+    <script>
+        // 頁面載入時顯示優化資訊
+        window.addEventListener('load', () => {
+            console.log('🎨 管理頁面優化測試頁面已載入');
+            console.log('📋 優化項目：圖片預覽縮小、表單簡化、操作優化');
+            console.log('🎯 目標：提升管理頁面的使用體驗和視覺效果');
+        });
+    </script>
+</body>
+</html> 

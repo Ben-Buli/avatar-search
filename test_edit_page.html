@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯頁面測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .test-image:hover {
+            transform: scale(1.05);
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .test-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-item:hover {
+            background: #f0f0f0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>編輯頁面測試</h1>
+        
+        <div class="status info">
+            點擊下方的圖片來測試跳轉到編輯頁面的功能
+        </div>
+        
+        <div class="test-grid">
+            <div class="test-item">
+                <img src="Avatar/avatar-1.png" alt="avatar-1" class="test-image" onclick="testEditPage('avatar-1.png')">
+                <p>avatar-1.png</p>
+            </div>
+            <div class="test-item">
+                <img src="Avatar/avatar-2.png" alt="avatar-2" class="test-image" onclick="testEditPage('avatar-2.png')">
+                <p>avatar-2.png</p>
+            </div>
+            <div class="test-item">
+                <img src="Avatar/avatar-3.png" alt="avatar-3" class="test-image" onclick="testEditPage('avatar-3.png')">
+                <p>avatar-3.png</p>
+            </div>
+            <div class="test-item">
+                <img src="Avatar/avatar-4.png" alt="avatar-4" class="test-image" onclick="testEditPage('avatar-4.png')">
+                <p>avatar-4.png</p>
+            </div>
+            <div class="test-item">
+                <img src="Avatar/avatar-5.png" alt="avatar-5" class="test-image" onclick="testEditPage('avatar-5.png')">
+                <p>avatar-5.png</p>
+            </div>
+            <div class="test-item">
+                <img src="Avatar/avatar-6.png" alt="avatar-6" class="test-image" onclick="testEditPage('avatar-6.png')">
+                <p>avatar-6.png</p>
+            </div>
+        </div>
+        
+        <div class="status success">
+            <h3>測試說明：</h3>
+            <ul>
+                <li>點擊任意圖片會跳轉到編輯頁面</li>
+                <li>編輯頁面會顯示選中的圖片</li>
+                <li>可以進行各種編輯操作</li>
+                <li>可以修改圖片資訊和標籤</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button onclick="window.location.href='index.html'">返回首頁</button>
+            <button onclick="window.location.href='edit.html?image=avatar-1.png'">直接測試編輯頁面</button>
+        </div>
+    </div>
+
+    <script>
+        function testEditPage(filename) {
+            // 跳轉到編輯頁面
+            window.location.href = `edit.html?image=${encodeURIComponent(filename)}`;
+        }
+        
+        // 檢查圖片是否存在
+        window.addEventListener('load', () => {
+            const images = document.querySelectorAll('.test-image');
+            images.forEach(img => {
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    this.parentElement.querySelector('p').textContent = '圖片不存在';
+                    this.parentElement.style.opacity = '0.5';
+                };
+            });
+        });
+    </script>
+</body>
+</html> 

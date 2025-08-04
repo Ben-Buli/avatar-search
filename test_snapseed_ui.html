@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapseed 風格圖片編輯介面測試</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .test-image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+        
+        .test-image-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .test-image-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 1;
+        }
+        
+        .test-image {
+            position: relative;
+            z-index: 2;
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+        }
+        
+        .test-info {
+            margin-top: 1rem;
+            color: #fff;
+        }
+        
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .test-description {
+            font-size: 1rem;
+            color: #ccc;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .test-instructions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 300px;
+            z-index: 10;
+        }
+        
+        .test-instructions h3 {
+            margin: 0 0 0.5rem 0;
+            color: #3498db;
+        }
+        
+        .test-instructions ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .test-instructions li {
+            margin-bottom: 0.25rem;
+            color: #ccc;
+        }
+        
+        .test-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .test-close-btn:hover {
+            background: rgba(231, 76, 60, 1);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- 測試說明 -->
+        <div class="test-instructions">
+            <h3>🎨 Snapseed 風格介面測試</h3>
+            <ul>
+                <li>點擊底部導航欄的圖示來開啟對應的編輯工具</li>
+                <li>每個工具都有獨立的控制面板</li>
+                <li>點擊工具面板右上角的 ✕ 來關閉工具</li>
+                <li>支援背景顏色、亮度、對比度、飽和度調整</li>
+                <li>支援圖片翻轉、旋轉、裁剪功能</li>
+                <li>支援配件添加和下載功能</li>
+            </ul>
+        </div>
+        
+        <!-- 關閉按鈕 -->
+        <button class="test-close-btn" onclick="window.close()">
+            <i class="fas fa-times"></i> 關閉測試
+        </button>
+        
+        <!-- 測試圖片 -->
+        <div class="test-image-container">
+            <div class="test-image-wrapper">
+                <div class="test-image-background" id="testImageBackground"></div>
+                <img src="Avatar/avatar-1.png" alt="測試圖片" class="test-image" id="testImage">
+            </div>
+            <div class="test-info">
+                <div class="test-title">Snapseed 風格圖片編輯</div>
+                <div class="test-description">
+                    體驗全新的底部導航欄設計，類似 Snapseed 的直觀操作介面
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部編輯導航欄 -->
+        <div class="edit-bottom-nav">
+            <!-- 背景顏色 -->
+            <div class="edit-nav-item" data-tool="background">
+                <i class="fas fa-palette"></i>
+                <span>背景</span>
+            </div>
+            
+            <!-- 基本調整 -->
+            <div class="edit-nav-item" data-tool="adjust">
+                <i class="fas fa-sliders-h"></i>
+                <span>調整</span>
+            </div>
+            
+            <!-- 變形 -->
+            <div class="edit-nav-item" data-tool="transform">
+                <i class="fas fa-expand-arrows-alt"></i>
+                <span>變形</span>
+            </div>
+            
+            <!-- 裁剪 -->
+            <div class="edit-nav-item" data-tool="crop">
+                <i class="fas fa-crop"></i>
+                <span>裁剪</span>
+            </div>
+            
+            <!-- 配件 -->
+            <div class="edit-nav-item" data-tool="accessories">
+                <i class="fas fa-plus-circle"></i>
+                <span>配件</span>
+            </div>
+            
+            <!-- 下載 -->
+            <div class="edit-nav-item" data-tool="download">
+                <i class="fas fa-download"></i>
+                <span>下載</span>
+            </div>
+        </div>
+        
+        <!-- 工具面板 -->
+        <div class="edit-tool-panel">
+            <!-- 背景顏色工具 -->
+            <div class="tool-content" id="backgroundTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>背景顏色</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="color-picker-container">
+                        <input type="color" id="testBackgroundColorPicker" value="#ffffff">
+                        <button id="testResetColorBtn" class="reset-color-btn">
+                            <i class="fas fa-undo"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 基本調整工具 -->
+            <div class="tool-content" id="adjustTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>基本調整</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="adjust-controls">
+                        <div class="control-group">
+                            <label for="testBrightnessSlider">亮度</label>
+                            <input type="range" id="testBrightnessSlider" min="0" max="200" value="100" class="slider">
+                            <span id="testBrightnessValue">100%</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="testContrastSlider">對比度</label>
+                            <input type="range" id="testContrastSlider" min="0" max="200" value="100" class="slider">
+                            <span id="testContrastValue">100%</span>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="testSaturationSlider">飽和度</label>
+                            <input type="range" id="testSaturationSlider" min="0" max="200" value="100" class="slider">
+                            <span id="testSaturationValue">100%</span>
+                        </div>
+                    </div>
+                    <div class="reset-controls">
+                        <button id="testResetAdjustBtn" class="reset-all-btn">
+                            <i class="fas fa-undo-alt"></i>
+                            重置調整
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 變形工具 -->
+            <div class="tool-content" id="transformTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>變形</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="transform-controls">
+                        <div class="transform-buttons">
+                            <button id="testFlipHorizontalBtn" class="transform-btn" title="水平翻轉">
+                                <i class="fas fa-arrows-alt-h"></i>
+                                水平翻轉
+                            </button>
+                            <button id="testFlipVerticalBtn" class="transform-btn" title="垂直翻轉">
+                                <i class="fas fa-arrows-alt-v"></i>
+                                垂直翻轉
+                            </button>
+                            <button id="testRotate90Btn" class="transform-btn" title="90度旋轉">
+                                <i class="fas fa-redo"></i>
+                                90度旋轉
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 裁剪工具 -->
+            <div class="tool-content" id="cropTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>裁剪</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="crop-controls">
+                        <div class="crop-buttons">
+                            <button id="testCropBtn" class="crop-btn">
+                                <i class="fas fa-crop"></i>
+                                裁剪模式
+                            </button>
+                            <button id="testApplyCropBtn" class="crop-btn" style="display: none;">
+                                <i class="fas fa-check"></i>
+                                套用裁剪
+                            </button>
+                            <button id="testCancelCropBtn" class="crop-btn" style="display: none;">
+                                <i class="fas fa-times"></i>
+                                取消裁剪
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 配件工具 -->
+            <div class="tool-content" id="accessoriesTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>配件</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="accessories-selector">
+                        <div class="accessories-header">
+                            <button id="testAddAccessoryBtn" class="add-accessory-btn">
+                                <i class="fas fa-plus"></i>
+                                添加配件
+                            </button>
+                            <button id="testClearAccessoriesBtn" class="clear-accessories-btn">
+                                <i class="fas fa-trash"></i>
+                                清除所有配件
+                            </button>
+                        </div>
+                        
+                        <!-- 配件列表 -->
+                        <div id="testAccessoriesList" class="accessories-list">
+                            <p style="text-align: center; color: #bdc3c7; margin: 1rem 0;">
+                                尚未添加任何配件
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 下載工具 -->
+            <div class="tool-content" id="downloadTool" style="display: none;">
+                <div class="tool-header">
+                    <h4>下載</h4>
+                    <button class="close-tool-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tool-body">
+                    <div class="download-actions">
+                        <button id="testDownloadMergedBtn" class="download-merged-btn">
+                            <i class="fas fa-download"></i>
+                            下載合併圖片
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 測試用的 JavaScript 功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 底部導航欄事件
+            document.querySelectorAll('.edit-nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const tool = item.dataset.tool;
+                    showEditTool(tool);
+                });
+            });
+            
+            // 工具面板關閉按鈕事件
+            document.querySelectorAll('.close-tool-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    hideEditTool();
+                });
+            });
+            
+            // 背景顏色功能
+            const testBackgroundColorPicker = document.getElementById('testBackgroundColorPicker');
+            const testResetColorBtn = document.getElementById('testResetColorBtn');
+            const testImageBackground = document.getElementById('testImageBackground');
+            
+            testBackgroundColorPicker.addEventListener('input', (e) => {
+                testImageBackground.style.backgroundColor = e.target.value;
+            });
+            
+            testResetColorBtn.addEventListener('click', () => {
+                testBackgroundColorPicker.value = '#ffffff';
+                testImageBackground.style.backgroundColor = '#ffffff';
+            });
+            
+            // 基本調整功能
+            const testBrightnessSlider = document.getElementById('testBrightnessSlider');
+            const testContrastSlider = document.getElementById('testContrastSlider');
+            const testSaturationSlider = document.getElementById('testSaturationSlider');
+            const testBrightnessValue = document.getElementById('testBrightnessValue');
+            const testContrastValue = document.getElementById('testContrastValue');
+            const testSaturationValue = document.getElementById('testSaturationValue');
+            const testImage = document.getElementById('testImage');
+            
+            testBrightnessSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                testBrightnessValue.textContent = value + '%';
+                applyTestFilters();
+            });
+            
+            testContrastSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                testContrastValue.textContent = value + '%';
+                applyTestFilters();
+            });
+            
+            testSaturationSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                testSaturationValue.textContent = value + '%';
+                applyTestFilters();
+            });
+            
+            function applyTestFilters() {
+                const brightness = testBrightnessSlider.value;
+                const contrast = testContrastSlider.value;
+                const saturation = testSaturationSlider.value;
+                
+                testImage.style.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
+            }
+            
+            // 重置調整按鈕
+            const testResetAdjustBtn = document.getElementById('testResetAdjustBtn');
+            testResetAdjustBtn.addEventListener('click', () => {
+                testBrightnessSlider.value = 100;
+                testContrastSlider.value = 100;
+                testSaturationSlider.value = 100;
+                testBrightnessValue.textContent = '100%';
+                testContrastValue.textContent = '100%';
+                testSaturationValue.textContent = '100%';
+                testImage.style.filter = 'none';
+            });
+            
+            // 變形功能
+            const testFlipHorizontalBtn = document.getElementById('testFlipHorizontalBtn');
+            const testFlipVerticalBtn = document.getElementById('testFlipVerticalBtn');
+            const testRotate90Btn = document.getElementById('testRotate90Btn');
+            
+            let rotation = 0;
+            let flipH = false;
+            let flipV = false;
+            
+            testFlipHorizontalBtn.addEventListener('click', () => {
+                flipH = !flipH;
+                applyTestTransform();
+            });
+            
+            testFlipVerticalBtn.addEventListener('click', () => {
+                flipV = !flipV;
+                applyTestTransform();
+            });
+            
+            testRotate90Btn.addEventListener('click', () => {
+                rotation = (rotation + 90) % 360;
+                applyTestTransform();
+            });
+            
+            function applyTestTransform() {
+                let transform = '';
+                if (flipH) transform += 'scaleX(-1) ';
+                if (flipV) transform += 'scaleY(-1) ';
+                if (rotation !== 0) transform += `rotate(${rotation}deg)`;
+                
+                testImage.style.transform = transform.trim();
+            }
+            
+            // 下載功能
+            const testDownloadMergedBtn = document.getElementById('testDownloadMergedBtn');
+            testDownloadMergedBtn.addEventListener('click', () => {
+                alert('下載功能演示：這是一個測試頁面，實際下載功能需要在主應用程式中使用。');
+            });
+            
+            // 配件功能
+            const testAddAccessoryBtn = document.getElementById('testAddAccessoryBtn');
+            const testClearAccessoriesBtn = document.getElementById('testClearAccessoriesBtn');
+            
+            testAddAccessoryBtn.addEventListener('click', () => {
+                alert('配件功能演示：這是一個測試頁面，實際配件功能需要在主應用程式中使用。');
+            });
+            
+            testClearAccessoriesBtn.addEventListener('click', () => {
+                alert('清除配件功能演示：這是一個測試頁面，實際清除功能需要在主應用程式中使用。');
+            });
+        });
+        
+        // 顯示編輯工具
+        function showEditTool(toolName) {
+            // 移除所有活動狀態
+            document.querySelectorAll('.edit-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 隱藏所有工具面板
+            document.querySelectorAll('.tool-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // 激活選中的導航項目
+            const activeNavItem = document.querySelector(`[data-tool="${toolName}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+            
+            // 顯示對應的工具面板
+            const toolContent = document.getElementById(`${toolName}Tool`);
+            if (toolContent) {
+                toolContent.style.display = 'block';
+                document.querySelector('.edit-tool-panel').classList.add('show');
+            }
+        }
+        
+        // 隱藏編輯工具
+        function hideEditTool() {
+            // 移除所有活動狀態
+            document.querySelectorAll('.edit-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 隱藏工具面板
+            document.querySelector('.edit-tool-panel').classList.remove('show');
+            
+            // 隱藏所有工具內容
+            document.querySelectorAll('.tool-content').forEach(content => {
+                content.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html> 

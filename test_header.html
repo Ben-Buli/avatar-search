@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>頂部導航測試</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-content {
+            margin-top: 100px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .debug-info {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="edit-page">
+    <!-- 頂部導航 -->
+    <header class="edit-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="page-title">編輯頭貼</h1>
+            <button class="download-btn" onclick="testDownload()">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="test-content">
+        <h1>頂部導航測試</h1>
+        <p>這個頁面用來測試頂部導航和下載按鈕的顯示</p>
+        
+        <div class="debug-info">
+            <h3>調試信息：</h3>
+            <p>1. 頂部導航應該固定在頁面頂部</p>
+            <p>2. 左側應該有返回按鈕（←）</p>
+            <p>3. 中間應該有標題「編輯頭貼」</p>
+            <p>4. 右側應該有下載按鈕（📥）</p>
+            <p>5. 所有按鈕都應該可以點擊</p>
+        </div>
+        
+        <div class="debug-info">
+            <h3>按鈕測試：</h3>
+            <button onclick="testBack()" style="margin: 0.5rem; padding: 0.5rem 1rem; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                測試返回按鈕
+            </button>
+            <button onclick="testDownload()" style="margin: 0.5rem; padding: 0.5rem 1rem; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                測試下載按鈕
+            </button>
+        </div>
+        
+        <div class="debug-info">
+            <h3>CSS 檢查：</h3>
+            <p>檢查以下 CSS 類是否存在：</p>
+            <ul style="text-align: left;">
+                <li>.edit-header</li>
+                <li>.header-content</li>
+                <li>.back-btn</li>
+                <li>.page-title</li>
+                <li>.download-btn</li>
+            </ul>
+        </div>
+        
+        <div class="debug-info">
+            <h3>Font Awesome 檢查：</h3>
+            <p>檢查圖標是否正常顯示：</p>
+            <p>返回圖標：<i class="fas fa-arrow-left"></i></p>
+            <p>下載圖標：<i class="fas fa-download"></i></p>
+        </div>
+    </div>
+
+    <script>
+        function testBack() {
+            alert('返回按鈕點擊成功！');
+        }
+        
+        function testDownload() {
+            alert('下載按鈕點擊成功！');
+        }
+        
+        // 頁面載入時檢查元素
+        window.addEventListener('load', function() {
+            console.log('頁面載入完成');
+            
+            // 檢查頂部導航元素
+            const header = document.querySelector('.edit-header');
+            const headerContent = document.querySelector('.header-content');
+            const backBtn = document.querySelector('.back-btn');
+            const pageTitle = document.querySelector('.page-title');
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            console.log('頂部導航元素檢查：');
+            console.log('header:', header);
+            console.log('headerContent:', headerContent);
+            console.log('backBtn:', backBtn);
+            console.log('pageTitle:', pageTitle);
+            console.log('downloadBtn:', downloadBtn);
+            
+            // 檢查樣式
+            if (header) {
+                const headerStyle = window.getComputedStyle(header);
+                console.log('header position:', headerStyle.position);
+                console.log('header top:', headerStyle.top);
+                console.log('header z-index:', headerStyle.zIndex);
+            }
+            
+            if (downloadBtn) {
+                const downloadBtnStyle = window.getComputedStyle(downloadBtn);
+                console.log('downloadBtn display:', downloadBtnStyle.display);
+                console.log('downloadBtn visibility:', downloadBtnStyle.visibility);
+                console.log('downloadBtn opacity:', downloadBtnStyle.opacity);
+            }
+        });
+    </script>
+</body>
+</html> 

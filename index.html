@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社群頭貼管理系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="home">
+                    <i class="fas fa-home"></i>
+                    <span>首頁</span>
+                </button>
+                <button class="nav-tab" data-tab="manage">
+                    <i class="fas fa-cog"></i>
+                    <span>管理</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主內容區域 -->
+    <main class="main-content">
+        <!-- 首頁 -->
+        <section id="home" class="page active">
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="搜尋hashtag或主題..."
+                        class="search-input"
+                    >
+                    <button class="clear-btn" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label for="themeFilter">主題篩選:</label>
+                        <select id="themeFilter" class="filter-select">
+                            <option value="">全部主題</option>
+                        </select>
+                    </div>
+                    <div class="quick-filters">
+                        <button class="quick-filter-btn" data-filter="hashtags">
+                            <i class="fas fa-tags"></i>
+                            有標籤
+                        </button>
+                        <button class="quick-filter-btn" data-filter="theme">
+                            <i class="fas fa-folder"></i>
+                            有主題
+                        </button>
+                        <button class="quick-filter-btn" data-filter="all">
+                            <i class="fas fa-list"></i>
+                            全部
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-container">
+                <div class="results-header">
+                    <span id="resultsCount">找到 0 個結果</span>
+                    <div class="sort-options">
+                        <label for="sortSelect">排序:</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="name">按名稱</option>
+                            <option value="hashtags">按標籤數量</option>
+                            <option value="theme">按主題</option>
+                        </select>
+                        <label for="pageSizeSelect">顯示筆數:</label>
+                        <select id="pageSizeSelect" class="sort-select">
+                            <option value="5">5 筆</option>
+                            <option value="15">15 筆</option>
+                            <option value="all">全部</option>
+                        </select>
+                        <button id="exportResultsBtn" class="export-btn" style="display: none;">
+                            <i class="fas fa-download"></i>
+                            匯出結果
+                        </button>
+                    </div>
+                </div>
+                <div id="searchResults" class="search-results">
+                    <!-- 搜尋結果將在這裡動態生成 -->
+                </div>
+                <div id="pagination" class="pagination" style="display: none;">
+                    <!-- 分頁控制項將在這裡動態生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 圖片管理頁面 -->
+        <section id="manage" class="page">
+            <div class="manage-header">
+                <h2>圖片管理</h2>
+                <div class="manage-actions">
+                    <button id="selectAllBtn" class="action-btn">
+                        <i class="fas fa-check-square"></i>
+                        全選
+                    </button>
+                    <button id="deselectAllBtn" class="action-btn">
+                        <i class="fas fa-square"></i>
+                        取消全選
+                    </button>
+                    <button id="batchEditBtn" class="action-btn" style="display: none;">
+                        <i class="fas fa-edit"></i>
+                        批量編輯
+                    </button>
+                    <button id="saveAllBtn" class="save-btn">
+                        <i class="fas fa-save"></i>
+                        儲存所有變更
+                    </button>
+                    <button id="localStorageBtn" class="action-btn">
+                        <i class="fas fa-database"></i>
+                        本地儲存狀態
+                    </button>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="manageSearchInput" 
+                        placeholder="搜尋hashtag或主題..."
+                        class="search-input"
+                    >
+                    <button class="clear-btn" id="clearManageSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label for="manageThemeFilter">主題篩選:</label>
+                        <select id="manageThemeFilter" class="filter-select">
+                            <option value="">全部主題</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="manageSortSelect">排序:</label>
+                        <select id="manageSortSelect" class="filter-select">
+                            <option value="name">按名稱</option>
+                            <option value="hashtags">按標籤數量</option>
+                            <option value="theme">按主題</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <form id="manageForm" class="manage-form">
+                <div id="imageList" class="image-list">
+                    <!-- 圖片表單將在這裡動態生成 -->
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- 圖片編輯模態框 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>編輯圖片資訊</h3>
+                <button class="close-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-preview">
+                    <img id="modalImage" src="" alt="預覽圖片">
+                </div>
+                <div class="form-group">
+                    <label for="modalHashtags">Hashtags:</label>
+                    <div class="hashtag-input-container">
+                        <div id="hashtagTags" class="hashtag-tags"></div>
+                        <input 
+                            type="text" 
+                            id="hashtagInput" 
+                            placeholder="輸入hashtag..."
+                            class="hashtag-input"
+                        >
+                        <div id="hashtagSuggestions" class="hashtag-suggestions"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="modalFilename">檔案名稱:</label>
+                    <input 
+                        type="text" 
+                        id="modalFilename" 
+                        placeholder="輸入檔案名稱..."
+                        class="filename-input"
+                    >
+                    <div id="filenameSuggestions" class="filename-suggestions"></div>
+                </div>
+                <div class="form-group">
+                    <label for="modalTheme">主題:</label>
+                    <input 
+                        type="text" 
+                        id="modalTheme" 
+                        placeholder="輸入主題..."
+                        class="theme-input"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="modalHasBackground">背景設定:</label>
+                    <div class="background-option">
+                        <input 
+                            type="checkbox" 
+                            id="modalHasBackground" 
+                            class="background-checkbox"
+                        >
+                        <label for="modalHasBackground" class="background-label">
+                            此圖片已有背景（將隱藏調色盤功能）
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveImageBtn" class="save-btn">儲存</button>
+                <button id="cancelEditBtn" class="cancel-btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSON顯示模態框 -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>JSON資料</h3>
+                <button class="close-btn" id="closeJsonModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>以下是更新後的JSON資料，您可以複製並使用：</p>
+                <div id="jsonDisplay" class="json-display"></div>
+                <button id="copyJsonBtn" class="copy-json-btn">
+                    <i class="fas fa-copy"></i>
+                    複製JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看模態框 -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content view-modal-content">
+            <div class="modal-header">
+                <h3>查看頭貼</h3>
+                <button class="close-btn" id="closeViewModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="view-image-container">
+                    <div class="view-image-wrapper">
+                        <div id="viewImageBackground" class="view-image-background"></div>
+                        <img id="viewImage" src="" alt="查看圖片">
+                    </div>
+                </div>
+                <div class="view-info">
+                    <div class="view-filename">
+                        <label>顯示名稱:</label>
+                        <span id="viewDisplayName"></span>
+                    </div>
+                    <div class="view-tags">
+                        <label>標籤:</label>
+                        <div id="viewTags"></div>
+                    </div>
+                    <div class="view-theme">
+                        <label>主題:</label>
+                        <span id="viewTheme"></span>
+                    </div>
+                </div>
+                
+                <!-- 底部編輯導航欄 -->
+                <div class="edit-bottom-nav">
+                    <!-- 背景顏色 -->
+                    <div class="edit-nav-item" data-tool="background">
+                        <i class="fas fa-palette"></i>
+                        <span>背景</span>
+                    </div>
+                    
+                    <!-- 基本調整 -->
+                    <div class="edit-nav-item" data-tool="adjust">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>調整</span>
+                    </div>
+                    
+                    <!-- 變形 -->
+                    <div class="edit-nav-item" data-tool="transform">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <span>變形</span>
+                    </div>
+                    
+                    <!-- 裁剪 -->
+                    <div class="edit-nav-item" data-tool="crop">
+                        <i class="fas fa-crop"></i>
+                        <span>裁剪</span>
+                    </div>
+                    
+                    <!-- 配件 -->
+                    <div class="edit-nav-item" data-tool="accessories">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>配件</span>
+                    </div>
+                    
+                    <!-- 下載 -->
+                    <div class="edit-nav-item" data-tool="download">
+                        <i class="fas fa-download"></i>
+                        <span>下載</span>
+                    </div>
+                </div>
+                
+                <!-- 工具面板 -->
+                <div class="edit-tool-panel">
+                    <!-- 背景顏色工具 -->
+                    <div class="tool-content" id="backgroundTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>背景顏色</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="color-picker-container">
+                                <input type="color" id="backgroundColorPicker" value="#ffffff">
+                                <button id="resetColorBtn" class="reset-color-btn">
+                                    <i class="fas fa-undo"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 基本調整工具 -->
+                    <div class="tool-content" id="adjustTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>基本調整</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="adjust-controls">
+                                <div class="control-group">
+                                    <label for="brightnessSlider">亮度</label>
+                                    <input type="range" id="brightnessSlider" min="0" max="200" value="100" class="slider">
+                                    <span id="brightnessValue">100%</span>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="contrastSlider">對比度</label>
+                                    <input type="range" id="contrastSlider" min="0" max="200" value="100" class="slider">
+                                    <span id="contrastValue">100%</span>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="saturationSlider">飽和度</label>
+                                    <input type="range" id="saturationSlider" min="0" max="200" value="100" class="slider">
+                                    <span id="saturationValue">100%</span>
+                                </div>
+                            </div>
+                            <div class="reset-controls">
+                                <button id="resetAdjustBtn" class="reset-all-btn">
+                                    <i class="fas fa-undo-alt"></i>
+                                    重置調整
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 變形工具 -->
+                    <div class="tool-content" id="transformTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>變形</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="transform-controls">
+                                <div class="transform-buttons">
+                                    <button id="flipHorizontalBtn" class="transform-btn" title="水平翻轉">
+                                        <i class="fas fa-arrows-alt-h"></i>
+                                        水平翻轉
+                                    </button>
+                                    <button id="flipVerticalBtn" class="transform-btn" title="垂直翻轉">
+                                        <i class="fas fa-arrows-alt-v"></i>
+                                        垂直翻轉
+                                    </button>
+                                    <button id="rotate90Btn" class="transform-btn" title="90度旋轉">
+                                        <i class="fas fa-redo"></i>
+                                        90度旋轉
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 裁剪工具 -->
+                    <div class="tool-content" id="cropTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>裁剪</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="crop-controls">
+                                <div class="crop-buttons">
+                                    <button id="cropBtn" class="crop-btn">
+                                        <i class="fas fa-crop"></i>
+                                        裁剪模式
+                                    </button>
+                                    <button id="applyCropBtn" class="crop-btn" style="display: none;">
+                                        <i class="fas fa-check"></i>
+                                        套用裁剪
+                                    </button>
+                                    <button id="cancelCropBtn" class="crop-btn" style="display: none;">
+                                        <i class="fas fa-times"></i>
+                                        取消裁剪
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 配件工具 -->
+                    <div class="tool-content" id="accessoriesTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>配件</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="accessories-selector">
+                                <div class="accessories-header">
+                                    <button id="addAccessoryBtn" class="add-accessory-btn">
+                                        <i class="fas fa-plus"></i>
+                                        添加配件
+                                    </button>
+                                    <button id="clearAccessoriesBtn" class="clear-accessories-btn">
+                                        <i class="fas fa-trash"></i>
+                                        清除所有配件
+                                    </button>
+                                </div>
+                                
+                                <!-- 配件列表 -->
+                                <div id="accessoriesList" class="accessories-list">
+                                    <!-- 配件項目將在這裡動態生成 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 配件庫 -->
+                            <div id="accessoriesLibrary" class="accessories-library" style="display: none;">
+                                <div class="library-container">
+                                    <div class="library-header">
+                                        <h5>選擇配件</h5>
+                                        <div class="header-actions">
+                                            <button id="closeLibraryBtn" class="close-library-btn">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="accessoriesGrid" class="accessories-grid">
+                                        <!-- 配件選項將在這裡動態生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 下載工具 -->
+                    <div class="tool-content" id="downloadTool" style="display: none;">
+                        <div class="tool-header">
+                            <h4>下載</h4>
+                            <button class="close-tool-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="tool-body">
+                            <div class="download-actions">
+                                <button id="downloadMergedBtn" class="download-merged-btn">
+                                    <i class="fas fa-download"></i>
+                                    下載合併圖片
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量編輯模態框 -->
+    <div id="batchEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>批量編輯</h3>
+                <button class="close-btn" id="closeBatchModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="batch-info">
+                    <p>已選擇 <span id="selectedCount">0</span> 張圖片</p>
+                </div>
+                <div class="form-group">
+                    <label>批量添加標籤:</label>
+                    <div class="hashtag-input-container">
+                        <div id="batchHashtagTags" class="hashtag-tags"></div>
+                        <input 
+                            type="text" 
+                            id="batchHashtagInput" 
+                            placeholder="輸入要添加的標籤..."
+                            class="hashtag-input"
+                        >
+                        <div id="batchHashtagSuggestions" class="hashtag-suggestions"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>批量設定主題:</label>
+                    <input 
+                        type="text" 
+                        id="batchThemeInput" 
+                        placeholder="輸入主題..."
+                        class="theme-input"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>操作模式:</label>
+                    <div class="batch-mode">
+                        <label>
+                            <input type="radio" name="batchMode" value="add" checked>
+                            添加（保留現有內容）
+                        </label>
+                        <label>
+                            <input type="radio" name="batchMode" value="replace">
+                            替換（覆蓋現有內容）
+                        </label>
+                    </div>
+                </div>
+                <div class="batch-preview">
+                    <h4>預覽選中的圖片:</h4>
+                    <div id="batchPreviewGrid" class="batch-preview-grid">
+                        <!-- 預覽圖片將在這裡顯示 -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="applyBatchEdit" class="save-btn">
+                    <i class="fas fa-check"></i>
+                    套用批量編輯
+                </button>
+                <button id="cancelBatchEdit" class="cancel-btn">
+                    <i class="fas fa-times"></i>
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- localStorage 狀態模態框 -->
+    <div id="localStorageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>本地儲存狀態</h3>
+                <button class="close-btn" id="closeLocalStorageModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="localStorage-info">
+                    <div class="info-item">
+                        <strong>儲存狀態:</strong>
+                        <span id="localStorageStatus">檢查中...</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>資料大小:</strong>
+                        <span id="localStorageSize">計算中...</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>最後更新:</strong>
+                        <span id="localStorageLastUpdate">檢查中...</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>圖片數量:</strong>
+                        <span id="localStorageImageCount">計算中...</span>
+                    </div>
+                </div>
+                <div class="localStorage-actions">
+                    <button id="clearLocalStorageBtn" class="action-btn">
+                        <i class="fas fa-trash"></i>
+                        清除本地儲存
+                    </button>
+                    <button id="exportLocalStorageBtn" class="action-btn">
+                        <i class="fas fa-download"></i>
+                        匯出本地資料
+                    </button>
+                    <button id="importLocalStorageBtn" class="action-btn">
+                        <i class="fas fa-upload"></i>
+                        匯入本地資料
+                    </button>
+                </div>
+                <div class="localStorage-preview">
+                    <h4>資料預覽:</h4>
+                    <div id="localStoragePreview" class="json-preview">
+                        <!-- 資料預覽將在這裡顯示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 載入指示器 -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>載入中...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

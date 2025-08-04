@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯頁面改進演示</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-title {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demo-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .comparison-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .comparison-title.old {
+            color: #e74c3c;
+        }
+        
+        .comparison-title.new {
+            color: #27ae60;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon.old {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .feature-icon.new {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .feature-icon.improved {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .demo-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .demo-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .demo-btn.secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+        
+        .demo-btn.secondary:hover {
+            box-shadow: 0 6px 16px rgba(108, 117, 125, 0.3);
+        }
+        
+        .improvements-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .improvements-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        
+        .improvements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .improvement-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .improvement-title {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .improvement-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .demo-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .demo-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">編輯頁面手機版重新設計</h1>
+            <p class="demo-subtitle">專為手機設備優化的全新編輯體驗</p>
+        </div>
+        
+        <div class="comparison-grid">
+            <div class="comparison-card">
+                <h2 class="comparison-title old">
+                    <i class="fas fa-desktop"></i>
+                    舊版設計
+                </h2>
+                <ul class="feature-list">
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>桌面優先設計，手機體驗不佳</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>按鈕太小，觸控困難</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>佈局擁擠，操作不便</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>工具面板位置不當</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>缺乏視覺回饋</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon old">✗</div>
+                        <span>響應式支援有限</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="comparison-card">
+                <h2 class="comparison-title new">
+                    <i class="fas fa-mobile-alt"></i>
+                    新版設計
+                </h2>
+                <ul class="feature-list">
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>專為手機設計的響應式佈局</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>觸控優化的大按鈕和滑桿</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>清晰的工具選擇介面</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>現代化的漸層設計風格</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>流暢的動畫和視覺回饋</span>
+                    </li>
+                    <li>
+                        <div class="feature-icon new">✓</div>
+                        <span>完美的各種螢幕適配</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="improvements-section">
+            <h2 class="improvements-title">主要改進功能</h2>
+            <div class="improvements-grid">
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-palette"></i>
+                        現代化設計
+                    </h3>
+                    <p class="improvement-description">
+                        採用漸層背景、圓角設計和流暢動畫，提供更現代化的視覺體驗。所有元素都經過精心設計，確保視覺一致性和美觀性。
+                    </p>
+                </div>
+                
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-touch"></i>
+                        觸控優化
+                    </h3>
+                    <p class="improvement-description">
+                        所有按鈕和滑桿都經過觸控優化，提供更大的點擊區域和更好的觸控回饋。支援觸控設備的特殊需求，確保操作流暢。
+                    </p>
+                </div>
+                
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-mobile"></i>
+                        響應式佈局
+                    </h3>
+                    <p class="improvement-description">
+                        完美適配各種螢幕尺寸，從手機到平板都能提供最佳的使用體驗。佈局會根據螢幕大小自動調整，確保內容的可讀性。
+                    </p>
+                </div>
+                
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-tools"></i>
+                        工具面板重構
+                    </h3>
+                    <p class="improvement-description">
+                        重新設計的工具選擇介面，提供更直觀的操作體驗。工具按鈕排列更合理，功能分組更清晰，操作更便捷。
+                    </p>
+                </div>
+                
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-info-circle"></i>
+                        資訊面板優化
+                    </h3>
+                    <p class="improvement-description">
+                        可折疊的資訊編輯區域，節省螢幕空間的同時保持功能的完整性。支援展開/收合操作，提供更好的空間利用。
+                    </p>
+                </div>
+                
+                <div class="improvement-card">
+                    <h3 class="improvement-title">
+                        <i class="fas fa-rocket"></i>
+                        效能優化
+                    </h3>
+                    <p class="improvement-description">
+                        優化的程式碼結構和資源載入，提供更快的載入速度和更流暢的操作體驗。減少不必要的重繪和重排，提升整體效能。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-actions">
+            <a href="edit.html?image=avatar-1.png" class="demo-btn">
+                <i class="fas fa-play"></i>
+                體驗新版編輯頁面
+            </a>
+            <a href="test_mobile_edit.html" class="demo-btn secondary">
+                <i class="fas fa-mobile-alt"></i>
+                手機版測試頁面
+            </a>
+            <a href="index.html" class="demo-btn secondary">
+                <i class="fas fa-home"></i>
+                返回首頁
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

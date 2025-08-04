@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路徑測試</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .image-item {
+            text-align: center;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+        .image-item .filename {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 0.5rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <h1>Avatar資料夾路徑測試</h1>
+    
+    <div class="test-section">
+        <h2>路徑驗證</h2>
+        <button onclick="testPaths()">測試路徑</button>
+        <div id="pathStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>圖片載入測試</h2>
+        <div id="imageTest"></div>
+    </div>
+
+    <script>
+        async function testPaths() {
+            const status = document.getElementById('pathStatus');
+            status.innerHTML = '<div class="status">測試中...</div>';
+            
+            try {
+                // 測試Avatar資料夾是否存在
+                const response = await fetch('Avatar/');
+                if (response.ok) {
+                    status.innerHTML = '<div class="status success">✅ Avatar資料夾路徑正確</div>';
+                    loadSampleImages();
+                } else {
+                    status.innerHTML = '<div class="status error">❌ Avatar資料夾無法存取</div>';
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="status error">❌ 路徑測試失敗: ${error.message}</div>`;
+            }
+        }
+        
+        async function loadSampleImages() {
+            const imageTest = document.getElementById('imageTest');
+            const sampleImages = [
+                '234234234.png',
+                'image 91 (1).png',
+                'ㄑˇ.png',
+                'imageㄍ.png',
+                'imageˋˋˋˋ.png',
+                'image22222.png',
+                'imageㄉ2q3.png'
+            ];
+            
+            let html = '<div class="image-grid">';
+            let loadedCount = 0;
+            
+            for (const filename of sampleImages) {
+                const img = new Image();
+                img.onload = () => {
+                    loadedCount++;
+                    if (loadedCount === sampleImages.length) {
+                        imageTest.innerHTML += `<div class="status success">✅ 成功載入 ${loadedCount} 張圖片</div>`;
+                    }
+                };
+                img.onerror = () => {
+                    imageTest.innerHTML += `<div class="status error">❌ 無法載入圖片: ${filename}</div>`;
+                };
+                
+                html += `
+                    <div class="image-item">
+                        <img src="Avatar/${encodeURIComponent(filename)}" alt="${filename}" onerror="this.style.display='none'">
+                        <div class="filename">${filename}</div>
+                    </div>
+                `;
+                
+                img.src = `Avatar/${encodeURIComponent(filename)}`;
+            }
+            
+            html += '</div>';
+            imageTest.innerHTML = html;
+        }
+        
+        // 頁面載入時自動測試
+        window.addEventListener('load', testPaths);
+    </script>
+</body>
+</html> 

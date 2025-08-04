@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>手機版編輯頁面測試</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .test-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .features-list {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .features-list h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .features-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #495057;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">手機版編輯頁面測試</h1>
+        
+        <div class="test-links">
+            <a href="edit.html?image=avatar-1.png" class="test-link">
+                <i class="fas fa-mobile-alt"></i>
+                測試手機版編輯頁面
+            </a>
+            <a href="index.html" class="test-link">
+                <i class="fas fa-home"></i>
+                返回首頁
+            </a>
+        </div>
+        
+        <div class="features-list">
+            <h3>新功能特色：</h3>
+            <ul>
+                <li>專為手機設計的響應式佈局</li>
+                <li>觸控優化的按鈕和滑桿</li>
+                <li>現代化的漸層設計風格</li>
+                <li>流暢的動畫效果</li>
+                <li>直觀的工具選擇介面</li>
+                <li>可折疊的資訊面板</li>
+                <li>優化的圖片顯示區域</li>
+                <li>支援各種螢幕尺寸</li>
+                <li>改善的視覺回饋</li>
+                <li>更好的使用者體驗</li>
+            </ul>
+        </div>
+        
+        <div class="features-list">
+            <h3>技術改進：</h3>
+            <ul>
+                <li>重新設計的 HTML 結構</li>
+                <li>模組化的 CSS 樣式</li>
+                <li>優化的 JavaScript 功能</li>
+                <li>改善的觸控支援</li>
+                <li>更好的效能表現</li>
+                <li>支援現代瀏覽器特性</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

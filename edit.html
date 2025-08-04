@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>編輯頭貼</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="edit-page">
+    <!-- 頂部導航 -->
+    <header class="edit-header">
+        <div class="header-content">
+            <button class="back-btn" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="page-title">編輯頭貼</h1>
+            <button class="download-btn" onclick="downloadEditedImage()">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主要內容區域 -->
+    <main class="edit-main">
+        <!-- 圖片顯示區域 -->
+        <div class="image-display-section">
+            <div class="image-container">
+                <div class="image-background" id="imageBackground">
+                    <img id="editImage" class="edit-image" alt="編輯中的圖片">
+                    
+                    <!-- 配件容器 -->
+                    <div class="accessories-container" id="accessoriesContainer">
+                        <!-- 配件將在這裡動態添加 -->
+                    </div>
+                    
+                    <!-- 裁剪覆蓋層 -->
+                    <div class="crop-overlay" id="cropOverlay" style="display: none;">
+                        <div class="crop-selection" id="cropSelection">
+                            <!-- 裁剪邊界調整手柄 -->
+                            <div class="crop-handle nw" data-position="nw"></div>
+                            <div class="crop-handle ne" data-position="ne"></div>
+                            <div class="crop-handle sw" data-position="sw"></div>
+                            <div class="crop-handle se" data-position="se"></div>
+                            <div class="crop-handle n" data-position="n"></div>
+                            <div class="crop-handle s" data-position="s"></div>
+                            <div class="crop-handle e" data-position="e"></div>
+                            <div class="crop-handle w" data-position="w"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 工具面板 -->
+        <div class="tool-panel" id="toolPanel">
+            <!-- 調整工具 -->
+            <div class="tool-content active" id="adjustTool">
+                <div class="adjustment-controls">
+                    <div class="control-group">
+                        <label>亮度</label>
+                        <div class="slider-container">
+                            <input type="range" id="brightnessSlider" min="0" max="200" value="100">
+                            <span id="brightnessValue">100%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label>對比度</label>
+                        <div class="slider-container">
+                            <input type="range" id="contrastSlider" min="0" max="200" value="100">
+                            <span id="contrastValue">100%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label>飽和度</label>
+                        <div class="slider-container">
+                            <input type="range" id="saturationSlider" min="0" max="200" value="100">
+                            <span id="saturationValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 變形工具 (已隱藏) -->
+            <div class="tool-content" id="transformTool" style="display: none;">
+                <div class="transform-controls">
+                    <button id="flipHorizontalBtn" class="transform-btn">
+                        <i class="fas fa-arrows-alt-h"></i>
+                        水平翻轉
+                    </button>
+                    <button id="flipVerticalBtn" class="transform-btn">
+                        <i class="fas fa-arrows-alt-v"></i>
+                        垂直翻轉
+                    </button>
+                    <button id="rotate90Btn" class="transform-btn">
+                        <i class="fas fa-redo"></i>
+                        旋轉90°
+                    </button>
+                </div>
+            </div>
+
+            <!-- 裁剪工具 -->
+            <div class="tool-content" id="cropTool">
+                <div class="crop-controls">
+                    <button id="cropBtn" class="crop-btn">
+                        <i class="fas fa-crop"></i>
+                        開始裁剪
+                    </button>
+                    <div class="crop-actions" style="display: none;">
+                        <button id="applyCropBtn" class="action-btn success">
+                            <i class="fas fa-check"></i>
+                            確認
+                        </button>
+                        <button id="cancelCropBtn" class="action-btn danger">
+                            <i class="fas fa-times"></i>
+                            取消
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 配件工具 -->
+            <div class="tool-content" id="accessoryTool">
+                <div class="accessory-controls">
+                    <button id="addAccessoryBtn" class="accessory-btn">
+                        <i class="fas fa-plus"></i>
+                        添加配件
+                    </button>
+                    <button id="clearAccessoriesBtn" class="accessory-btn danger">
+                        <i class="fas fa-trash"></i>
+                        清除所有
+                    </button>
+                </div>
+            </div>
+
+            <!-- 背景工具 -->
+            <div class="tool-content" id="backgroundTool">
+                <div class="background-controls">
+                    <label>背景顏色</label>
+                    <div class="color-picker-container">
+                        <input type="color" id="backgroundColorPicker" value="#ffffff">
+                        <button id="resetColorBtn" class="reset-btn">
+                            <i class="fas fa-undo"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部導航欄 -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-tool="adjust">
+            <i class="fas fa-sliders-h"></i>
+            <span>調整</span>
+        </button>
+        <button class="nav-item" data-tool="transform" style="display: none;">
+            <i class="fas fa-expand-arrows-alt"></i>
+            <span>變形</span>
+        </button>
+        <button class="nav-item" data-tool="background">
+            <i class="fas fa-palette"></i>
+            <span>背景</span>
+        </button>
+        <button class="nav-item download-nav-btn" onclick="downloadEditedImage()">
+            <i class="fas fa-download"></i>
+            <span>下載</span>
+        </button>
+    </nav>
+
+    <!-- 配件庫模態框 -->
+    <div class="accessories-modal" id="accessoriesModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>選擇配件</h3>
+                <button class="close-btn" id="closeAccessoriesModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="accessories-grid" id="accessoriesGrid">
+                <!-- 配件將在這裡動態載入 -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="script.js"></script>
+    <script>
+        // 編輯頁面專用的初始化
+        // 注意：以下變數已在 script.js 中定義，這裡不需要重複宣告
+        // - currentEditingImage
+        // - imageEditState
+        // - accessories
+        // - selectedAccessory
+        
+        // 確保 imageEditState 已初始化
+        if (typeof imageEditState === 'undefined') {
+            imageEditState = {
+                brightness: 100,
+                contrast: 100,
+                saturation: 100,
+                flipHorizontal: false,
+                flipVertical: false,
+                rotation: 0,
+                cropData: null
+            };
+        }
+        
+        // 確保變形狀態正確初始化
+        console.log('初始化變形狀態:', imageEditState);
+
+        // 配件資料
+        const accessoriesData = [
+            { id: 'frame1', name: '相框1', src: 'Accessories/Frame 427 2.png' },
+            { id: 'frame2', name: '相框2', src: 'Accessories/Frame 462.png' },
+            { id: 'vector1', name: '裝飾1', src: 'Accessories/Vector 31 (3).png' },
+            { id: 'vector2', name: '裝飾2', src: 'Accessories/Vector 7 (1) 1.png' },
+            { id: 'image1', name: '配件1', src: 'Accessories/image (1) 1.png' },
+            { id: 'image2', name: '配件2', src: 'Accessories/image (2) 1.png' },
+            { id: 'earring1', name: '瑪瑙耳環', src: 'Accessories/瑪瑙耳環.png' },
+            { id: 'earring2', name: '瑪瑙耳環2', src: 'Accessories/瑪瑙耳環 (1).png' },
+            { id: 'bag1', name: '藍色情人袋', src: 'Accessories/藍色情人袋.png' },
+            { id: 'bag2', name: '紅色情人袋', src: 'Accessories/紅色情人袋 (1).png' }
+        ];
+
+        // 頁面載入時初始化
+        window.addEventListener('load', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filename = urlParams.get('image');
+            
+            if (!filename) {
+                showNotification('未指定要編輯的圖片', 'error');
+                return;
+            }
+
+            try {
+                await loadImageData();
+                initEditPage(filename);
+            } catch (error) {
+                console.error('初始化編輯頁面失敗:', error);
+                showNotification('載入編輯頁面失敗', 'error');
+            }
+        });
+
+        // 初始化編輯頁面
+        function initEditPage(filename) {
+            currentEditingImage = filename;
+            const data = imageData[filename] || {};
+            
+            // 設置圖片
+            const editImage = document.getElementById('editImage');
+            if (editImage) {
+                editImage.src = `Avatar/${encodeURIComponent(filename)}`;
+                
+                editImage.onload = function() {
+                    console.log('圖片載入成功:', filename);
+                    showNotification(`正在編輯: ${data.displayName || filename}`, 'success');
+                    
+                    // 圖片載入完成後應用當前的變形狀態
+                    setTimeout(() => {
+                        applyEditImageFilters();
+                        console.log('圖片載入後應用變形狀態:', imageEditState);
+                    }, 100);
+                };
+                
+                editImage.onerror = function() {
+                    console.error('圖片載入失敗:', filename);
+                    showNotification('圖片載入失敗，請檢查檔案是否存在', 'error');
+                };
+            }
+            
+
+            
+            // 初始化事件監聽器
+            initEditPageEventListeners();
+            
+            // 載入配件庫
+            loadAccessoriesLibrary();
+        }
+
+        // 初始化編輯頁面事件監聽器
+        function initEditPageEventListeners() {
+            // 底部導航事件（排除下載按鈕）
+            document.querySelectorAll('.nav-item:not(.download-nav-btn)').forEach(item => {
+                item.addEventListener('click', () => {
+                    const tool = item.dataset.tool;
+                    showTool(tool);
+                });
+            });
+
+            // 調整控制項事件
+            const brightnessSlider = document.getElementById('brightnessSlider');
+            const contrastSlider = document.getElementById('contrastSlider');
+            const saturationSlider = document.getElementById('saturationSlider');
+            
+            if (brightnessSlider) brightnessSlider.addEventListener('input', updateEditBrightness);
+            if (contrastSlider) contrastSlider.addEventListener('input', updateEditContrast);
+            if (saturationSlider) saturationSlider.addEventListener('input', updateEditSaturation);
+
+            // 變形控制項事件 (已隱藏)
+            // const flipHorizontalBtn = document.getElementById('flipHorizontalBtn');
+            // const flipVerticalBtn = document.getElementById('flipVerticalBtn');
+            // const rotate90Btn = document.getElementById('rotate90Btn');
+            
+            // if (flipHorizontalBtn) flipHorizontalBtn.addEventListener('click', flipEditHorizontal);
+            // if (flipVerticalBtn) flipVerticalBtn.addEventListener('click', flipEditVertical);
+            // if (rotate90Btn) rotate90Btn.addEventListener('click', rotateEdit90);
+
+            // 裁剪和配件功能已隱藏，移除相關事件監聽器
+
+            // 背景控制項事件
+            const backgroundColorPicker = document.getElementById('backgroundColorPicker');
+            const resetColorBtn = document.getElementById('resetColorBtn');
+            
+            if (backgroundColorPicker) backgroundColorPicker.addEventListener('input', updateBackgroundColor);
+            if (resetColorBtn) resetColorBtn.addEventListener('click', resetBackgroundColor);
+
+
+        }
+
+        // 顯示工具
+        function showTool(toolName) {
+            // 移除所有活動狀態
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 隱藏所有工具內容
+            document.querySelectorAll('.tool-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 激活選中的工具按鈕
+            const activeNavItem = document.querySelector(`[data-tool="${toolName}"]`);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+            }
+            
+            // 顯示對應的工具內容
+            const toolContent = document.getElementById(`${toolName}Tool`);
+            if (toolContent) {
+                toolContent.classList.add('active');
+            }
+        }
+
+
+
+
+
+        // 編輯頁面專用的調整函數
+        function updateEditBrightness() {
+            const slider = document.getElementById('brightnessSlider');
+            const valueDisplay = document.getElementById('brightnessValue');
+            if (slider && valueDisplay) {
+                const value = slider.value;
+                valueDisplay.textContent = `${value}%`;
+                imageEditState.brightness = parseInt(value);
+                applyEditImageFilters();
+            }
+        }
+
+        function updateEditContrast() {
+            const slider = document.getElementById('contrastSlider');
+            const valueDisplay = document.getElementById('contrastValue');
+            if (slider && valueDisplay) {
+                const value = slider.value;
+                valueDisplay.textContent = `${value}%`;
+                imageEditState.contrast = parseInt(value);
+                applyEditImageFilters();
+            }
+        }
+
+        function updateEditSaturation() {
+            const slider = document.getElementById('saturationSlider');
+            const valueDisplay = document.getElementById('saturationValue');
+            if (slider && valueDisplay) {
+                const value = slider.value;
+                valueDisplay.textContent = `${value}%`;
+                imageEditState.saturation = parseInt(value);
+                applyEditImageFilters();
+            }
+        }
+
+        // 編輯頁面專用的濾鏡應用函數（修復 null 錯誤）
+        function applyEditImageFilters() {
+            const img = document.getElementById('editImage');
+            if (!img) return;
+            
+            const filters = [];
+            
+            // 亮度
+            if (imageEditState.brightness !== 100) {
+                filters.push(`brightness(${imageEditState.brightness}%)`);
+            }
+            
+            // 對比度
+            if (imageEditState.contrast !== 100) {
+                filters.push(`contrast(${imageEditState.contrast}%)`);
+            }
+            
+            // 飽和度
+            if (imageEditState.saturation !== 100) {
+                filters.push(`saturate(${imageEditState.saturation}%)`);
+            }
+            
+            // 應用濾鏡效果，使用 !important 確保優先級
+            const filterString = filters.join(' ');
+            img.style.setProperty('filter', filterString, 'important');
+            
+            // 應用變形效果（與下載保持一致）
+            let transformString = '';
+            
+            // 先應用旋轉，再應用翻轉（與 Canvas 處理順序一致）
+            if (imageEditState.rotation !== 0) {
+                transformString += `rotate(${imageEditState.rotation}deg) `;
+            }
+            
+            // 應用翻轉
+            let scaleX = imageEditState.flipHorizontal ? -1 : 1;
+            let scaleY = imageEditState.flipVertical ? -1 : 1;
+            if (scaleX !== 1 || scaleY !== 1) {
+                transformString += `scale(${scaleX}, ${scaleY}) `;
+            }
+            
+            // 應用變形效果
+            if (transformString) {
+                img.style.setProperty('transform', transformString.trim(), 'important');
+            } else {
+                img.style.removeProperty('transform');
+            }
+            
+            // 強制重新渲染
+            img.style.setProperty('transform-origin', 'center', 'important');
+            
+            // 添加調試信息
+            console.log('應用變形效果:', {
+                rotation: imageEditState.rotation,
+                flipHorizontal: imageEditState.flipHorizontal,
+                flipVertical: imageEditState.flipVertical,
+                filter: filterString,
+                transform: transformString.trim()
+            });
+        }
+
+        // 編輯頁面專用的翻轉函數
+        function flipEditHorizontal() {
+            imageEditState.flipHorizontal = !imageEditState.flipHorizontal;
+            const btn = document.getElementById('flipHorizontalBtn');
+            if (btn) {
+                btn.classList.toggle('active', imageEditState.flipHorizontal);
+            }
+            applyEditImageFilters();
+            console.log('水平翻轉:', imageEditState.flipHorizontal);
+        }
+
+        function flipEditVertical() {
+            imageEditState.flipVertical = !imageEditState.flipVertical;
+            const btn = document.getElementById('flipVerticalBtn');
+            if (btn) {
+                btn.classList.toggle('active', imageEditState.flipVertical);
+            }
+            applyEditImageFilters();
+            console.log('垂直翻轉:', imageEditState.flipVertical);
+        }
+
+        function rotateEdit90() {
+            imageEditState.rotation = (imageEditState.rotation + 90) % 360;
+            applyEditImageFilters();
+            console.log('旋轉角度:', imageEditState.rotation);
+        }
+
+        // 重置調整
+        function resetAdjustments() {
+            imageEditState.brightness = 100;
+            imageEditState.contrast = 100;
+            imageEditState.saturation = 100;
+            
+            const brightnessSlider = document.getElementById('brightnessSlider');
+            const contrastSlider = document.getElementById('contrastSlider');
+            const saturationSlider = document.getElementById('saturationSlider');
+            
+            if (brightnessSlider) {
+                brightnessSlider.value = 100;
+                document.getElementById('brightnessValue').textContent = '100%';
+            }
+            if (contrastSlider) {
+                contrastSlider.value = 100;
+                document.getElementById('contrastValue').textContent = '100%';
+            }
+            if (saturationSlider) {
+                saturationSlider.value = 100;
+                document.getElementById('saturationValue').textContent = '100%';
+            }
+            
+            applyEditImageFilters();
+            showNotification('調整已重置', 'success');
+        }
+
+        // 重置所有編輯
+        function resetAllEdits() {
+            // 重置調整
+            resetAdjustments();
+            
+            // 重置變形
+            imageEditState.rotation = 0;
+            imageEditState.flipHorizontal = false;
+            imageEditState.flipVertical = false;
+            
+            const flipHorizontalBtn = document.getElementById('flipHorizontalBtn');
+            const flipVerticalBtn = document.getElementById('flipVerticalBtn');
+            
+            if (flipHorizontalBtn) flipHorizontalBtn.classList.remove('active');
+            if (flipVerticalBtn) flipVerticalBtn.classList.remove('active');
+            
+            applyEditImageFilters();
+            showNotification('所有編輯已重置', 'success');
+        }
+
+        // 裁剪相關函數
+        function toggleCropMode() {
+            const cropOverlay = document.getElementById('cropOverlay');
+            const cropBtn = document.getElementById('cropBtn');
+            const cropActions = document.querySelector('.crop-actions');
+            
+            if (cropOverlay.style.display === 'none') {
+                cropOverlay.style.display = 'block';
+                cropBtn.style.display = 'none';
+                cropActions.style.display = 'flex';
+                document.body.classList.add('crop-mode');
+                initCropSelection();
+            } else {
+                cropOverlay.style.display = 'none';
+                cropBtn.style.display = 'block';
+                cropActions.style.display = 'none';
+                document.body.classList.remove('crop-mode');
+            }
+        }
+
+        function initCropSelection() {
+            const cropSelection = document.getElementById('cropSelection');
+            const img = document.getElementById('editImage');
+            
+            if (!cropSelection || !img) return;
+            
+            // 設置初始裁剪區域（圖片中心的一半大小）
+            const rect = img.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const size = Math.min(rect.width, rect.height) / 2;
+            
+            cropSelection.style.left = `${centerX - size/2}px`;
+            cropSelection.style.top = `${centerY - size/2}px`;
+            cropSelection.style.width = `${size}px`;
+            cropSelection.style.height = `${size}px`;
+            
+            // 添加拖拽和調整功能
+            makeCropDraggable(cropSelection);
+            addCropResizeHandles(cropSelection);
+        }
+
+        function makeCropDraggable(selection) {
+            let isDragging = false;
+            let startX, startY, startLeft, startTop;
+            
+            selection.addEventListener('mousedown', (e) => {
+                if (e.target === selection) {
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startLeft = parseInt(selection.style.left);
+                    startTop = parseInt(selection.style.top);
+                    selection.style.cursor = 'grabbing';
+                }
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                selection.style.left = `${startLeft + deltaX}px`;
+                selection.style.top = `${startTop + deltaY}px`;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                selection.style.cursor = 'grab';
+            });
+        }
+
+        function addCropResizeHandles(selection) {
+            const handles = ['nw', 'ne', 'sw', 'se', 'n', 's', 'e', 'w'];
+            
+            handles.forEach(pos => {
+                const handle = document.createElement('div');
+                handle.className = `crop-handle ${pos}`;
+                handle.dataset.position = pos;
+                selection.appendChild(handle);
+                
+                // 添加調整大小功能
+                makeHandleResizable(handle, selection, pos);
+            });
+        }
+
+        function makeHandleResizable(handle, selection, position) {
+            let isResizing = false;
+            let startX, startY, startWidth, startHeight, startLeft, startTop;
+            
+            handle.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                isResizing = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startWidth = parseInt(selection.style.width);
+                startHeight = parseInt(selection.style.height);
+                startLeft = parseInt(selection.style.left);
+                startTop = parseInt(selection.style.top);
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                let newWidth = startWidth;
+                let newHeight = startHeight;
+                let newLeft = startLeft;
+                let newTop = startTop;
+                
+                // 根據手柄位置調整大小
+                switch (position) {
+                    case 'se':
+                        newWidth = startWidth + deltaX;
+                        newHeight = startHeight + deltaY;
+                        break;
+                    case 'sw':
+                        newWidth = startWidth - deltaX;
+                        newHeight = startHeight + deltaY;
+                        newLeft = startLeft + deltaX;
+                        break;
+                    case 'ne':
+                        newWidth = startWidth + deltaX;
+                        newHeight = startHeight - deltaY;
+                        newTop = startTop + deltaY;
+                        break;
+                    case 'nw':
+                        newWidth = startWidth - deltaX;
+                        newHeight = startHeight - deltaY;
+                        newLeft = startLeft + deltaX;
+                        newTop = startTop + deltaY;
+                        break;
+                    case 'e':
+                        newWidth = startWidth + deltaX;
+                        break;
+                    case 'w':
+                        newWidth = startWidth - deltaX;
+                        newLeft = startLeft + deltaX;
+                        break;
+                    case 's':
+                        newHeight = startHeight + deltaY;
+                        break;
+                    case 'n':
+                        newHeight = startHeight - deltaY;
+                        newTop = startTop + deltaY;
+                        break;
+                }
+                
+                // 確保最小尺寸
+                newWidth = Math.max(50, newWidth);
+                newHeight = Math.max(50, newHeight);
+                
+                selection.style.width = `${newWidth}px`;
+                selection.style.height = `${newHeight}px`;
+                selection.style.left = `${newLeft}px`;
+                selection.style.top = `${newTop}px`;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isResizing = false;
+            });
+        }
+
+        function applyCrop() {
+            // 這裡實現裁切邏輯
+            showNotification('裁切功能開發中', 'info');
+            toggleCropMode();
+        }
+
+        function cancelCrop() {
+            toggleCropMode();
+        }
+
+        // 背景相關函數
+        function updateBackgroundColor() {
+            const picker = document.getElementById('backgroundColorPicker');
+            const background = document.getElementById('imageBackground');
+            
+            if (picker && background) {
+                background.style.backgroundColor = picker.value;
+            }
+        }
+
+        function resetBackgroundColor() {
+            const picker = document.getElementById('backgroundColorPicker');
+            const background = document.getElementById('imageBackground');
+            
+            if (picker && background) {
+                picker.value = '#ffffff';
+                background.style.backgroundColor = '#ffffff';
+            }
+            showNotification('背景顏色已重置', 'success');
+        }
+
+        // 配件相關函數
+        function openAccessoriesModal() {
+            const modal = document.getElementById('accessoriesModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeAccessoriesModal() {
+            const modal = document.getElementById('accessoriesModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function loadAccessoriesLibrary() {
+            const grid = document.getElementById('accessoriesGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            accessoriesData.forEach(accessory => {
+                const item = document.createElement('div');
+                item.className = 'accessory-item';
+                item.innerHTML = `
+                    <img src="${accessory.src}" alt="${accessory.name}" onclick="addAccessoryToImage('${accessory.id}', '${accessory.name}', '${accessory.src}')">
+                    <span>${accessory.name}</span>
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        function addAccessoryToImage(id, name, src) {
+            const container = document.getElementById('accessoriesContainer');
+            if (!container) return;
+            
+            const accessory = document.createElement('div');
+            accessory.className = 'accessory-element';
+            accessory.dataset.id = id;
+            accessory.innerHTML = `
+                <img src="${src}" alt="${name}">
+                <div class="accessory-controls">
+                    <button class="control-btn" onclick="removeAccessory('${id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="control-btn" onclick="rotateAccessory('${id}')">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="control-btn" onclick="scaleAccessory('${id}')">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(accessory);
+            
+            // 添加拖拽功能
+            makeAccessoryDraggable(accessory);
+            
+            closeAccessoriesModal();
+            showNotification(`已添加 ${name}`, 'success');
+        }
+
+        function makeAccessoryDraggable(accessory) {
+            let isDragging = false;
+            let startX, startY, startLeft, startTop;
+            
+            accessory.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.accessory-controls')) return;
+                
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = parseInt(accessory.style.left) || 0;
+                startTop = parseInt(accessory.style.top) || 0;
+                accessory.style.cursor = 'grabbing';
+                accessory.style.zIndex = '1000';
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                
+                accessory.style.left = `${startLeft + deltaX}px`;
+                accessory.style.top = `${startTop + deltaY}px`;
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                accessory.style.cursor = 'grab';
+                accessory.style.zIndex = 'auto';
+            });
+        }
+
+        function removeAccessory(id) {
+            const accessory = document.querySelector(`[data-id="${id}"]`);
+            if (accessory) {
+                accessory.remove();
+                showNotification('配件已移除', 'success');
+            }
+        }
+
+        function rotateAccessory(id) {
+            const accessory = document.querySelector(`[data-id="${id}"]`);
+            if (accessory) {
+                const currentRotation = parseInt(accessory.dataset.rotation) || 0;
+                const newRotation = (currentRotation + 90) % 360;
+                accessory.dataset.rotation = newRotation;
+                accessory.style.transform = `rotate(${newRotation}deg)`;
+                showNotification('配件已旋轉', 'success');
+            }
+        }
+
+        function scaleAccessory(id) {
+            const accessory = document.querySelector(`[data-id="${id}"]`);
+            if (accessory) {
+                const currentScale = parseFloat(accessory.dataset.scale) || 1;
+                const newScale = currentScale === 1 ? 1.5 : currentScale === 1.5 ? 0.5 : 1;
+                accessory.dataset.scale = newScale;
+                accessory.style.transform = `scale(${newScale})`;
+                showNotification('配件已縮放', 'success');
+            }
+        }
+
+        function clearAllAccessories() {
+            const container = document.getElementById('accessoriesContainer');
+            if (container) {
+                container.innerHTML = '';
+                showNotification('所有配件已清除', 'success');
+            }
+        }
+
+        // 驗證變形效果一致性
+        function validateTransformConsistency() {
+            console.log('=== 變形效果一致性驗證 ===');
+            console.log('當前變形狀態:', {
+                rotation: imageEditState.rotation,
+                flipHorizontal: imageEditState.flipHorizontal,
+                flipVertical: imageEditState.flipVertical
+            });
+            
+            const img = document.getElementById('editImage');
+            if (img) {
+                console.log('預覽圖片樣式:', {
+                    filter: img.style.filter,
+                    transform: img.style.transform,
+                    transformOrigin: img.style.transformOrigin
+                });
+            }
+        }
+
+        // 下載編輯後的圖片
+        function downloadEditedImage() {
+            if (!currentEditingImage) {
+                showNotification('沒有可下載的圖片', 'error');
+                return;
+            }
+            
+            // 驗證變形效果一致性
+            validateTransformConsistency();
+
+            try {
+                // 載入主要圖片
+                const mainImage = document.getElementById('editImage');
+                if (!mainImage || !mainImage.complete) {
+                    showNotification('圖片尚未載入完成', 'error');
+                    return;
+                }
+
+                // 獲取圖片資料
+                const data = imageData[currentEditingImage] || {};
+                const hasBackground = data.hasBackground || false;
+                const backgroundColor = document.getElementById('backgroundColorPicker')?.value || '#ffffff';
+
+                // 創建 canvas，使用原圖的實際尺寸
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 計算最終尺寸（考慮旋轉）
+                let finalWidth = mainImage.naturalWidth;
+                let finalHeight = mainImage.naturalHeight;
+                
+                if (imageEditState.rotation === 90 || imageEditState.rotation === 270) {
+                    [finalWidth, finalHeight] = [finalHeight, finalWidth];
+                }
+                
+                // 設置 canvas 尺寸為原圖的實際尺寸
+                canvas.width = finalWidth;
+                canvas.height = finalHeight;
+                
+                // 根據是否有背景來決定是否繪製背景
+                if (!hasBackground) {
+                    // 沒有背景的圖片繪製背景顏色
+                    ctx.fillStyle = backgroundColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                // 保存當前狀態
+                ctx.save();
+                
+                // 移動到畫布中心
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                
+                // 先應用旋轉，再應用翻轉（與預覽保持一致）
+                if (imageEditState.rotation !== 0) {
+                    ctx.rotate(imageEditState.rotation * Math.PI / 180);
+                }
+                
+                // 應用翻轉
+                let scaleX = imageEditState.flipHorizontal ? -1 : 1;
+                let scaleY = imageEditState.flipVertical ? -1 : 1;
+                ctx.scale(scaleX, scaleY);
+                
+                // 繪製圖片（保持原圖畫質）
+                ctx.drawImage(mainImage, -mainImage.naturalWidth / 2, -mainImage.naturalHeight / 2);
+                
+                // 恢復狀態
+                ctx.restore();
+                
+                // 應用亮度、對比度、飽和度（使用像素級調整）
+                if (imageEditState.brightness !== 100 || imageEditState.contrast !== 100 || imageEditState.saturation !== 100) {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    for (let i = 0; i < data.length; i += 4) {
+                        // 亮度調整
+                        if (imageEditState.brightness !== 100) {
+                            const factor = imageEditState.brightness / 100;
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor)); // G
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor)); // B
+                        }
+                        
+                        // 對比度調整
+                        if (imageEditState.contrast !== 100) {
+                            const factor = (imageEditState.contrast + 100) / 100;
+                            const offset = 128 * (1 - factor);
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor + offset));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor + offset)); // G
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor + offset)); // B
+                        }
+                        
+                        // 飽和度調整（簡化版本）
+                        if (imageEditState.saturation !== 100) {
+                            const factor = imageEditState.saturation / 100;
+                            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                            data[i] = Math.min(255, Math.max(0, gray + factor * (data[i] - gray)));     // R
+                            data[i + 1] = Math.min(255, Math.max(0, gray + factor * (data[i + 1] - gray))); // G
+                            data[i + 2] = Math.min(255, Math.max(0, gray + factor * (data[i + 2] - gray))); // B
+                        }
+                    }
+                    
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                
+                // 繪製配件（按比例縮放）
+                const accessories = document.querySelectorAll('.accessory-element');
+                if (accessories.length > 0) {
+                    // 計算縮放比例
+                    const displayWidth = mainImage.offsetWidth;
+                    const displayHeight = mainImage.offsetHeight;
+                    const scaleX = canvas.width / displayWidth;
+                    const scaleY = canvas.height / displayHeight;
+                    
+                    accessories.forEach(accessory => {
+                        const accessoryImg = accessory.querySelector('img');
+                        if (accessoryImg && accessoryImg.complete) {
+                            // 獲取配件在顯示區域中的位置
+                            const accessoryRect = accessory.getBoundingClientRect();
+                            const mainImageRect = mainImage.getBoundingClientRect();
+                            
+                            // 計算配件相對於主圖的位置
+                            const relativeX = accessoryRect.left - mainImageRect.left;
+                            const relativeY = accessoryRect.top - mainImageRect.top;
+                            
+                            // 縮放到原圖尺寸
+                            const scaledX = relativeX * scaleX;
+                            const scaledY = relativeY * scaleY;
+                            const scaledWidth = accessoryRect.width * scaleX;
+                            const scaledHeight = accessoryRect.height * scaleY;
+                            
+                            // 應用配件的變形
+                            ctx.save();
+                            
+                            // 獲取配件的旋轉和縮放
+                            const rotation = parseInt(accessory.dataset.rotation) || 0;
+                            const scale = parseFloat(accessory.dataset.scale) || 1;
+                            
+                            if (rotation !== 0 || scale !== 1) {
+                                ctx.translate(scaledX + scaledWidth/2, scaledY + scaledHeight/2);
+                                ctx.rotate(rotation * Math.PI / 180);
+                                ctx.scale(scale, scale);
+                                ctx.translate(-(scaledX + scaledWidth/2), -(scaledY + scaledHeight/2));
+                            }
+                            
+                            ctx.drawImage(accessoryImg, scaledX, scaledY, scaledWidth, scaledHeight);
+                            ctx.restore();
+                        }
+                    });
+                }
+                
+                // 轉換為 blob 並下載
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `edited_${currentEditingImage}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showNotification('圖片下載成功！', 'success');
+                }, 'image/png', 1.0); // 使用最高品質
+                
+            } catch (error) {
+                console.error('下載圖片失敗:', error);
+                showNotification('下載失敗，請重試', 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

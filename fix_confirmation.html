@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下載按鈕修復確認</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+        
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        
+        .problem-section, .solution-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #dee2e6;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .code-block {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .test-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔧 下載按鈕修復確認</h1>
+        
+        <div class="status success">
+            <strong>✅ 問題已修復</strong><br>
+            CSS 樣式衝突已解決，下載按鈕現在應該正常顯示。
+        </div>
+        
+        <div class="problem-section">
+            <div class="section-title">🐛 問題原因</div>
+            <p>在 <code>styles.css</code> 中有兩個不同的 <code>.download-btn</code> 樣式定義：</p>
+            <ul>
+                <li>第 503 行：用於圖片卡片的懸停下載按鈕（<code>opacity: 0</code>）</li>
+                <li>第 3499 行：用於頂部導航的下載按鈕</li>
+            </ul>
+            <p>這造成了樣式衝突，導致頂部導航的下載按鈕被隱藏。</p>
+        </div>
+        
+        <div class="solution-section">
+            <div class="section-title">🛠️ 解決方案</div>
+            <p>將圖片卡片的樣式改為更具體的選擇器：</p>
+            <div class="code-block">
+/* 修改前 */
+.download-btn {
+    opacity: 0;
+    /* ... */
+}
+
+/* 修改後 */
+.image-card .download-btn {
+    opacity: 0;
+    /* ... */
+}
+            </div>
+            <p>這樣可以避免樣式衝突，確保頂部導航的下載按鈕正常顯示。</p>
+        </div>
+        
+        <div class="status info">
+            <strong>📋 修復內容</strong>
+            <ul>
+                <li>✅ 修復了 CSS 樣式衝突</li>
+                <li>✅ 下載按鈕現在應該在右上角正常顯示</li>
+                <li>✅ 保持了圖片卡片的懸停下載功能</li>
+                <li>✅ 確保了樣式的正確應用</li>
+            </ul>
+        </div>
+        
+        <div class="test-links">
+            <a href="edit.html?image=avatar-54.png" class="test-link">
+                <span>🖼️</span>
+                <span>測試修復後的頁面</span>
+            </a>
+            <a href="edit.html?image=avatar-1.png" class="test-link">
+                <span>🖼️</span>
+                <span>測試其他圖片</span>
+            </a>
+            <a href="test_header.html" class="test-link">
+                <span>🔍</span>
+                <span>調試測試頁面</span>
+            </a>
+            <a href="index.html" class="test-link">
+                <span>🏠</span>
+                <span>返回首頁</span>
+            </a>
+        </div>
+        
+        <div class="status info">
+            <strong>🎯 現在應該看到</strong>
+            <ul>
+                <li>✅ 右上角有下載按鈕（📥）</li>
+                <li>✅ 按鈕可以正常點擊</li>
+                <li>✅ 點擊後會下載編輯後的圖片</li>
+                <li>✅ 所有編輯效果都會被保留在下載的圖片中</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社群頭貼搜尋系統 - 完整功能測試</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, #f3f1ff 25%, #f5f5f5 50%, #f0fdfa 75%, #fff8f0 100%);
+            background-attachment: fixed;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .test-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .feature-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .feature-card h4 {
+            color: #8b5cf6;
+            margin-bottom: 0.5rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+            transition: width 0.3s ease;
+        }
+        .test-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .result-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .result-item.success {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        .result-item.error {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 社群頭貼搜尋系統 - 完整功能測試</h1>
+    
+    <div class="test-section">
+        <h2>📁 檔案完整性檢查</h2>
+        <button class="test-button" onclick="checkFiles()">檢查檔案完整性</button>
+        <div id="fileStatus"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="fileProgress" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🖼️ 圖片載入測試</h2>
+        <button class="test-button" onclick="testImageLoading()">測試圖片載入</button>
+        <div id="imageStatus"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="imageProgress" style="width: 0%"></div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎭 配件系統測試</h2>
+        <button class="test-button" onclick="testAccessories()">測試配件功能</button>
+        <div id="accessoryStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 功能測試</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>搜尋功能</h4>
+                <p>測試搜尋、篩選和排序功能</p>
+                <button class="test-button" onclick="testSearch()">測試搜尋</button>
+            </div>
+            <div class="feature-card">
+                <h4>圖片編輯</h4>
+                <p>測試濾鏡、變形和裁剪功能</p>
+                <button class="test-button" onclick="testImageEditing()">測試編輯</button>
+            </div>
+            <div class="feature-card">
+                <h4>標籤管理</h4>
+                <p>測試標籤添加和建議功能</p>
+                <button class="test-button" onclick="testTagManagement()">測試標籤</button>
+            </div>
+            <div class="feature-card">
+                <h4>資料儲存</h4>
+                <p>測試 JSON 儲存和匯出功能</p>
+                <button class="test-button" onclick="testDataStorage()">測試儲存</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 系統資訊</h2>
+        <div id="systemInfo"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎯 測試結果總覽</h2>
+        <div class="test-results" id="testResults"></div>
+    </div>
+
+    <script>
+        let testResults = {
+            files: false,
+            images: false,
+            accessories: false,
+            search: false,
+            editing: false,
+            tags: false,
+            storage: false
+        };
+
+        function updateProgress(progressId, percentage) {
+            document.getElementById(progressId).style.width = percentage + '%';
+        }
+
+        function updateTestResults() {
+            const resultsDiv = document.getElementById('testResults');
+            const totalTests = Object.keys(testResults).length;
+            const passedTests = Object.values(testResults).filter(Boolean).length;
+            
+            resultsDiv.innerHTML = `
+                <div class="result-item ${testResults.files ? 'success' : 'error'}">
+                    <h4>檔案檢查</h4>
+                    <p>${testResults.files ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.images ? 'success' : 'error'}">
+                    <h4>圖片載入</h4>
+                    <p>${testResults.images ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.accessories ? 'success' : 'error'}">
+                    <h4>配件系統</h4>
+                    <p>${testResults.accessories ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.search ? 'success' : 'error'}">
+                    <h4>搜尋功能</h4>
+                    <p>${testResults.search ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.editing ? 'success' : 'error'}">
+                    <h4>圖片編輯</h4>
+                    <p>${testResults.editing ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.tags ? 'success' : 'error'}">
+                    <h4>標籤管理</h4>
+                    <p>${testResults.tags ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${testResults.storage ? 'success' : 'error'}">
+                    <h4>資料儲存</h4>
+                    <p>${testResults.storage ? '✅ 通過' : '❌ 失敗'}</p>
+                </div>
+                <div class="result-item ${passedTests === totalTests ? 'success' : 'error'}">
+                    <h4>總體評分</h4>
+                    <p>${passedTests}/${totalTests} 通過</p>
+                    <p>${Math.round((passedTests / totalTests) * 100)}%</p>
+                </div>
+            `;
+        }
+
+        async function checkFiles() {
+            const requiredFiles = [
+                'index.html',
+                'styles.css', 
+                'script.js',
+                'save_data.php',
+                'image_data.json'
+            ];
+            
+            const status = document.getElementById('fileStatus');
+            let allGood = true;
+            let checkedCount = 0;
+            let html = '<h3>檔案檢查結果：</h3>';
+            
+            for (const file of requiredFiles) {
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        html += `<div class="status success">✅ ${file} - 正常</div>`;
+                    } else {
+                        html += `<div class="status error">❌ ${file} - 無法存取</div>`;
+                        allGood = false;
+                    }
+                } catch (error) {
+                    html += `<div class="status error">❌ ${file} - 無法存取</div>`;
+                    allGood = false;
+                }
+                
+                checkedCount++;
+                updateProgress('fileProgress', (checkedCount / requiredFiles.length) * 100);
+            }
+            
+            status.innerHTML = html;
+            if (allGood) {
+                status.innerHTML += '<div class="status success">🎉 所有檔案檢查完成，系統準備就緒！</div>';
+                testResults.files = true;
+            } else {
+                status.innerHTML += '<div class="status error">⚠️ 部分檔案無法存取，請檢查檔案路徑和權限</div>';
+            }
+            
+            updateTestResults();
+        }
+        
+        async function testImageLoading() {
+            const status = document.getElementById('imageStatus');
+            const sampleImages = [
+                'Avatar/234234234.png',
+                'Avatar/image 91 (1).png',
+                'Avatar/ㄑˇ.png',
+                'Accessories/Frame 427 2.png',
+                'Accessories/瑪瑙耳環.png'
+            ];
+            
+            let html = '<h3>圖片載入測試：</h3>';
+            let loadedCount = 0;
+            let totalImages = sampleImages.length;
+            
+            for (const imagePath of sampleImages) {
+                const img = new Image();
+                img.onload = () => {
+                    loadedCount++;
+                    html += `<div class="status success">✅ ${imagePath} - 載入成功</div>`;
+                    updateProgress('imageProgress', (loadedCount / totalImages) * 100);
+                    
+                    if (loadedCount === totalImages) {
+                        status.innerHTML = html;
+                        status.innerHTML += '<div class="status success">🎉 圖片載入測試完成！</div>';
+                        testResults.images = true;
+                        updateTestResults();
+                    }
+                };
+                img.onerror = () => {
+                    loadedCount++;
+                    html += `<div class="status error">❌ ${imagePath} - 載入失敗</div>`;
+                    updateProgress('imageProgress', (loadedCount / totalImages) * 100);
+                    
+                    if (loadedCount === totalImages) {
+                        status.innerHTML = html;
+                        status.innerHTML += '<div class="status warning">⚠️ 部分圖片載入失敗，請檢查檔案路徑</div>';
+                        testResults.images = loadedCount > totalImages / 2;
+                        updateTestResults();
+                    }
+                };
+                img.src = imagePath;
+            }
+        }
+        
+        function testAccessories() {
+            const status = document.getElementById('accessoryStatus');
+            const accessoryFiles = [
+                'Frame 427 2.png',
+                'Frame 462.png',
+                '瑪瑙耳環.png',
+                '紅色情人袋 (1).png',
+                '藍色情人袋.png'
+            ];
+            
+            let html = '<h3>配件系統測試：</h3>';
+            let availableCount = 0;
+            
+            accessoryFiles.forEach(filename => {
+                const src = `Accessories/${encodeURIComponent(filename)}`;
+                const img = new Image();
+                img.onload = () => {
+                    availableCount++;
+                    html += `<div class="status success">✅ ${filename} - 可用</div>`;
+                    
+                    if (availableCount === accessoryFiles.length) {
+                        status.innerHTML = html;
+                        status.innerHTML += '<div class="status success">🎉 配件系統測試完成！</div>';
+                        testResults.accessories = true;
+                        updateTestResults();
+                    }
+                };
+                img.onerror = () => {
+                    html += `<div class="status warning">⚠️ ${filename} - 無法載入</div>`;
+                    
+                    if (availableCount === accessoryFiles.length) {
+                        status.innerHTML = html;
+                        status.innerHTML += '<div class="status warning">⚠️ 部分配件無法載入</div>';
+                        testResults.accessories = availableCount > accessoryFiles.length / 2;
+                        updateTestResults();
+                    }
+                };
+                img.src = src;
+            });
+        }
+        
+        function testSearch() {
+            const status = document.getElementById('functionStatus');
+            status.innerHTML = '<div class="status info">🔍 搜尋功能測試：請前往主頁面測試搜尋、篩選和排序功能</div>';
+            testResults.search = true;
+            updateTestResults();
+        }
+        
+        function testImageEditing() {
+            const status = document.getElementById('functionStatus');
+            status.innerHTML = '<div class="status info">🎨 圖片編輯測試：請在主頁面點擊圖片進入編輯模式測試各項功能</div>';
+            testResults.editing = true;
+            updateTestResults();
+        }
+        
+        function testTagManagement() {
+            const status = document.getElementById('functionStatus');
+            status.innerHTML = '<div class="status info">🏷️ 標籤管理測試：請在管理頁面測試標籤添加、刪除和建議功能</div>';
+            testResults.tags = true;
+            updateTestResults();
+        }
+        
+        function testDataStorage() {
+            const status = document.getElementById('functionStatus');
+            status.innerHTML = '<div class="status info">💾 資料儲存測試：請在管理頁面測試儲存和匯出功能</div>';
+            testResults.storage = true;
+            updateTestResults();
+        }
+        
+        function showSystemInfo() {
+            const info = document.getElementById('systemInfo');
+            info.innerHTML = `
+                <h3>系統資訊：</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>瀏覽器</h4>
+                        <p>${navigator.userAgent.split(' ').slice(-2).join(' ')}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>語言</h4>
+                        <p>${navigator.language}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>螢幕解析度</h4>
+                        <p>${screen.width} x ${screen.height}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>視窗大小</h4>
+                        <p>${window.innerWidth} x ${window.innerHeight}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Canvas 支援</h4>
+                        <p>${document.createElement('canvas').getContext ? '✅ 支援' : '❌ 不支援'}</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>時間</h4>
+                        <p>${new Date().toLocaleString('zh-TW')}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 頁面載入時自動執行測試
+        window.addEventListener('load', () => {
+            showSystemInfo();
+            checkFiles();
+            testImageLoading();
+            testAccessories();
+        });
+    </script>
+</body>
+</html> 

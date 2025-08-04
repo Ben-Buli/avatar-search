@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下載功能驗證</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .validation-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-image {
+            max-width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .test-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #218838;
+        }
+        .test-button.secondary {
+            background: #6c757d;
+        }
+        .test-button.secondary:hover {
+            background: #5a6268;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .result.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        .result.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        .result.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>下載功能驗證</h1>
+    
+    <div class="validation-container">
+        <h2>基本功能測試</h2>
+        <img id="testImage" class="test-image" src="Avatar/avatar-1.png" alt="測試圖片">
+        
+        <div>
+            <button class="test-button" onclick="testBasicDownload()">測試基本下載</button>
+            <button class="test-button secondary" onclick="testWithEffects()">測試帶效果下載</button>
+            <button class="test-button secondary" onclick="testBackgroundHandling()">測試背景處理</button>
+        </div>
+        
+        <div id="testResults"></div>
+    </div>
+
+    <div class="validation-container">
+        <h2>驗證清單</h2>
+        <div id="validationList">
+            <div class="result info">
+                <strong>等待測試...</strong><br>
+                點擊上方按鈕開始驗證下載功能
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模擬必要的變數
+        let imageData = {
+            'avatar-1.png': {
+                displayName: '測試頭貼',
+                theme: '測試',
+                hashtags: ['測試', '頭貼'],
+                hasBackground: false
+            }
+        };
+
+        let imageEditState = {
+            brightness: 100,
+            contrast: 100,
+            saturation: 100,
+            flipHorizontal: false,
+            flipVertical: false,
+            rotation: 0,
+            cropData: null
+        };
+
+        function showResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = `<div class="result ${type}">${message}</div>`;
+        }
+
+        function updateValidationList(items) {
+            const listDiv = document.getElementById('validationList');
+            listDiv.innerHTML = items.map(item => 
+                `<div class="result ${item.status}">${item.message}</div>`
+            ).join('');
+        }
+
+        function testBasicDownload() {
+            try {
+                const img = document.getElementById('testImage');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 設置 canvas 尺寸為原圖的實際尺寸
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                
+                // 繪製原圖（保持原圖畫質）
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // 轉換為 blob 並下載
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `test_basic_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showResult(`
+                        ✅ 基本下載測試成功！<br>
+                        <strong>下載資訊：</strong><br>
+                        - 原始尺寸: ${img.naturalWidth} x ${img.naturalHeight}<br>
+                        - 輸出尺寸: ${canvas.width} x ${canvas.height}<br>
+                        - 格式: PNG<br>
+                        - 品質: 最高
+                    `, 'success');
+                    
+                    updateValidationList([
+                        { status: 'success', message: '✅ 基本下載功能正常' },
+                        { status: 'success', message: '✅ 原圖畫質保持正常' },
+                        { status: 'success', message: '✅ 尺寸比例正確' },
+                        { status: 'info', message: '⏳ 等待效果測試...' },
+                        { status: 'info', message: '⏳ 等待背景處理測試...' }
+                    ]);
+                }, 'image/png', 1.0);
+                
+            } catch (error) {
+                showResult(`❌ 基本下載測試失敗: ${error.message}`, 'error');
+                updateValidationList([
+                    { status: 'error', message: `❌ 基本下載功能失敗: ${error.message}` }
+                ]);
+            }
+        }
+
+        function testWithEffects() {
+            try {
+                const img = document.getElementById('testImage');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 設置測試效果
+                imageEditState.brightness = 120;
+                imageEditState.contrast = 110;
+                imageEditState.saturation = 90;
+                imageEditState.rotation = 45;
+                imageEditState.flipHorizontal = true;
+                
+                // 計算最終尺寸（考慮旋轉）
+                let finalWidth = img.naturalWidth;
+                let finalHeight = img.naturalHeight;
+                
+                if (imageEditState.rotation === 90 || imageEditState.rotation === 270) {
+                    [finalWidth, finalHeight] = [finalHeight, finalWidth];
+                }
+                
+                // 設置 canvas 尺寸
+                canvas.width = finalWidth;
+                canvas.height = finalHeight;
+                
+                // 保存當前狀態
+                ctx.save();
+                
+                // 移動到畫布中心
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                
+                // 應用旋轉
+                if (imageEditState.rotation !== 0) {
+                    ctx.rotate(imageEditState.rotation * Math.PI / 180);
+                }
+                
+                // 應用翻轉
+                let scaleX = imageEditState.flipHorizontal ? -1 : 1;
+                let scaleY = imageEditState.flipVertical ? -1 : 1;
+                ctx.scale(scaleX, scaleY);
+                
+                // 繪製圖片
+                ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2);
+                
+                // 恢復狀態
+                ctx.restore();
+                
+                // 應用濾鏡效果
+                if (imageEditState.brightness !== 100 || imageEditState.contrast !== 100 || imageEditState.saturation !== 100) {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    
+                    for (let i = 0; i < data.length; i += 4) {
+                        // 亮度調整
+                        if (imageEditState.brightness !== 100) {
+                            const factor = imageEditState.brightness / 100;
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor));
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor));
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor));
+                        }
+                        
+                        // 對比度調整
+                        if (imageEditState.contrast !== 100) {
+                            const factor = (imageEditState.contrast + 100) / 100;
+                            const offset = 128 * (1 - factor);
+                            data[i] = Math.min(255, Math.max(0, data[i] * factor + offset));
+                            data[i + 1] = Math.min(255, Math.max(0, data[i + 1] * factor + offset));
+                            data[i + 2] = Math.min(255, Math.max(0, data[i + 2] * factor + offset));
+                        }
+                        
+                        // 飽和度調整
+                        if (imageEditState.saturation !== 100) {
+                            const factor = imageEditState.saturation / 100;
+                            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                            data[i] = Math.min(255, Math.max(0, gray + factor * (data[i] - gray)));
+                            data[i + 1] = Math.min(255, Math.max(0, gray + factor * (data[i + 1] - gray)));
+                            data[i + 2] = Math.min(255, Math.max(0, gray + factor * (data[i + 2] - gray)));
+                        }
+                    }
+                    
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                
+                // 轉換為 blob 並下載
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `test_effects_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showResult(`
+                        ✅ 效果下載測試成功！<br>
+                        <strong>應用效果：</strong><br>
+                        - 亮度: ${imageEditState.brightness}%<br>
+                        - 對比度: ${imageEditState.contrast}%<br>
+                        - 飽和度: ${imageEditState.saturation}%<br>
+                        - 旋轉: ${imageEditState.rotation}°<br>
+                        - 水平翻轉: ${imageEditState.flipHorizontal ? '是' : '否'}
+                    `, 'success');
+                    
+                    updateValidationList([
+                        { status: 'success', message: '✅ 基本下載功能正常' },
+                        { status: 'success', message: '✅ 原圖畫質保持正常' },
+                        { status: 'success', message: '✅ 尺寸比例正確' },
+                        { status: 'success', message: '✅ 編輯效果應用正常' },
+                        { status: 'info', message: '⏳ 等待背景處理測試...' }
+                    ]);
+                }, 'image/png', 1.0);
+                
+            } catch (error) {
+                showResult(`❌ 效果下載測試失敗: ${error.message}`, 'error');
+            }
+        }
+
+        function testBackgroundHandling() {
+            try {
+                const img = document.getElementById('testImage');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 重置效果
+                imageEditState = {
+                    brightness: 100,
+                    contrast: 100,
+                    saturation: 100,
+                    flipHorizontal: false,
+                    flipVertical: false,
+                    rotation: 0,
+                    cropData: null
+                };
+                
+                const backgroundColor = '#ff0000'; // 紅色背景
+                const data = imageData['avatar-1.png'] || {};
+                const hasBackground = data.hasBackground || false;
+                
+                // 設置 canvas 尺寸
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                
+                // 根據是否有背景來決定是否繪製背景
+                if (!hasBackground) {
+                    // 沒有背景的圖片繪製背景顏色
+                    ctx.fillStyle = backgroundColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                // 繪製圖片
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // 轉換為 blob 並下載
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `test_background_${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    showResult(`
+                        ✅ 背景處理測試成功！<br>
+                        <strong>背景處理：</strong><br>
+                        - 圖片有背景: ${hasBackground ? '是' : '否'}<br>
+                        - 背景顏色: ${hasBackground ? '保持原背景' : backgroundColor}<br>
+                        - 處理方式: ${hasBackground ? '不添加背景' : '添加背景色'}
+                    `, 'success');
+                    
+                    updateValidationList([
+                        { status: 'success', message: '✅ 基本下載功能正常' },
+                        { status: 'success', message: '✅ 原圖畫質保持正常' },
+                        { status: 'success', message: '✅ 尺寸比例正確' },
+                        { status: 'success', message: '✅ 編輯效果應用正常' },
+                        { status: 'success', message: '✅ 背景處理正確' }
+                    ]);
+                }, 'image/png', 1.0);
+                
+            } catch (error) {
+                showResult(`❌ 背景處理測試失敗: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

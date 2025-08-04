@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>變數衝突修復測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .test-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .test-link {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #3b82f6;
+        }
+        
+        .console-output {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">變數衝突修復測試</h1>
+        
+        <div class="status success">
+            <strong>✅ 修復完成</strong><br>
+            已移除所有重複的變數宣告，解決了 JavaScript 語法錯誤。
+        </div>
+        
+        <div class="test-section">
+            <h3>修復的變數衝突</h3>
+            <ul>
+                <li><strong>currentEditingImage</strong> - 移除重複宣告</li>
+                <li><strong>imageEditState</strong> - 移除重複宣告</li>
+                <li><strong>accessories</strong> - 移除重複宣告</li>
+                <li><strong>selectedAccessory</strong> - 移除重複宣告</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>測試編輯頁面</h3>
+            <div class="test-links">
+                <a href="edit.html?image=avatar-1.png" class="test-link">
+                    <span>🖼️</span>
+                    <span>測試 avatar-1.png</span>
+                </a>
+                <a href="edit.html?image=avatar-17.png" class="test-link">
+                    <span>🖼️</span>
+                    <span>測試 avatar-17.png</span>
+                </a>
+                <a href="edit.html?image=avatar-20.png" class="test-link">
+                    <span>🖼️</span>
+                    <span>測試 avatar-20.png</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>其他測試頁面</h3>
+            <div class="test-links">
+                <a href="test_edit_preview.html" class="test-link">
+                    <span>🔍</span>
+                    <span>完整測試頁面</span>
+                </a>
+                <a href="test_mobile_edit.html" class="test-link">
+                    <span>📱</span>
+                    <span>手機版測試</span>
+                </a>
+                <a href="index.html" class="test-link">
+                    <span>🏠</span>
+                    <span>返回首頁</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>預期結果</h3>
+            <div class="status info">
+                <strong>應該看到：</strong>
+                <ul>
+                    <li>✅ 沒有 JavaScript 語法錯誤</li>
+                    <li>✅ 圖片正常載入和顯示</li>
+                    <li>✅ 編輯工具正常運作</li>
+                    <li>✅ 手機版響應式設計正常</li>
+                    <li>✅ 所有功能按鈕可點擊</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="console-output" id="consoleOutput">
+            <div>等待測試結果...</div>
+        </div>
+    </div>
+    
+    <script>
+        // 模擬控制台輸出
+        const consoleOutput = document.getElementById('consoleOutput');
+        
+        function addConsoleMessage(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.style.color = color;
+            messageDiv.innerHTML = `[${timestamp}] ${message}`;
+            consoleOutput.appendChild(messageDiv);
+            
+            // 自動滾動到底部
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        // 頁面載入時顯示訊息
+        window.addEventListener('load', function() {
+            addConsoleMessage('頁面載入完成', 'success');
+            addConsoleMessage('變數衝突修復測試開始', 'info');
+            addConsoleMessage('請點擊上方連結測試編輯頁面', 'info');
+        });
+        
+        // 監聽頁面錯誤
+        window.addEventListener('error', function(e) {
+            addConsoleMessage(`JavaScript 錯誤: ${e.message}`, 'error');
+        });
+        
+        // 監聽未處理的 Promise 拒絕
+        window.addEventListener('unhandledrejection', function(e) {
+            addConsoleMessage(`Promise 錯誤: ${e.reason}`, 'error');
+        });
+    </script>
+</body>
+</html> 

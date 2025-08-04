@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圖片格式支援測試 - 社群頭貼搜尋系統</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, #f3f1ff 25%, #f5f5f5 50%, #f0fdfa 75%, #fff8f0 100%);
+            background-attachment: fixed;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .format-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .format-card.supported {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        .format-card.unsupported {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+        .format-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .format-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .format-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h2>🖼️ 圖片格式支援測試 - v1.3.0</h2>
+        <p>測試社群頭貼搜尋系統支援的圖片格式</p>
+    </div>
+
+    <div class="test-section">
+        <div class="status success">
+            <h4>✅ 支援的圖片格式</h4>
+            <p>系統現在支援以下 12 種圖片格式：</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 格式清單</h3>
+        <div class="format-grid">
+            <div class="format-card supported">
+                <div class="format-icon">🖼️</div>
+                <div class="format-name">PNG</div>
+                <div class="format-description">可攜式網路圖形<br>支援透明度</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">📷</div>
+                <div class="format-name">JPG/JPEG</div>
+                <div class="format-description">聯合圖像專家組<br>高壓縮率</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">🎬</div>
+                <div class="format-name">GIF</div>
+                <div class="format-description">圖形交換格式<br>支援動畫</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">🌐</div>
+                <div class="format-name">WebP</div>
+                <div class="format-description">Google 開發<br>現代化格式</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">💾</div>
+                <div class="format-name">BMP</div>
+                <div class="format-description">點陣圖格式<br>無損壓縮</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">📄</div>
+                <div class="format-name">TIFF/TIF</div>
+                <div class="format-description">標籤圖像檔案格式<br>專業用途</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">🎨</div>
+                <div class="format-name">SVG</div>
+                <div class="format-description">可縮放向量圖形<br>向量格式</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">🔗</div>
+                <div class="format-name">ICO</div>
+                <div class="format-description">圖示檔案格式<br>網站圖示</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">📱</div>
+                <div class="format-name">AVIF</div>
+                <div class="format-description">AV1 圖像檔案格式<br>新一代格式</div>
+            </div>
+            <div class="format-card supported">
+                <div class="format-icon">🍎</div>
+                <div class="format-name">HEIC/HEIF</div>
+                <div class="format-description">高效圖像格式<br>Apple 開發</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔧 技術說明</h3>
+        <div class="status info">
+            <h4>📊 格式支援詳情</h4>
+            <ul>
+                <li><strong>PNG/JPG/GIF/WebP</strong>：完全支援，包括編輯和處理</li>
+                <li><strong>BMP/TIFF</strong>：支援載入和顯示，編輯功能可能受限</li>
+                <li><strong>SVG</strong>：支援載入和顯示，向量圖形處理</li>
+                <li><strong>ICO</strong>：支援載入和顯示，適合圖示用途</li>
+                <li><strong>AVIF/HEIC/HEIF</strong>：支援載入和顯示，現代化格式</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🚀 使用建議</h3>
+        <div class="format-grid">
+            <div class="format-card">
+                <h4>📱 網頁使用</h4>
+                <p>推薦使用 WebP、PNG 或 JPG 格式，平衡檔案大小和品質</p>
+            </div>
+            <div class="format-card">
+                <h4>🎨 編輯需求</h4>
+                <p>如需編輯功能，建議使用 PNG 或 JPG 格式</p>
+            </div>
+            <div class="format-card">
+                <h4>📊 專業用途</h4>
+                <p>高品質需求可使用 TIFF 或 BMP 格式</p>
+            </div>
+            <div class="format-card">
+                <h4>🔗 圖示用途</h4>
+                <p>網站圖示建議使用 ICO 或 SVG 格式</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 快速連結</h3>
+        <div class="format-grid">
+            <div class="format-card">
+                <h4>主系統</h4>
+                <p>前往主系統測試圖片格式支援</p>
+                <a href="index.html" style="color: #8b5cf6; text-decoration: none; font-weight: 500;">前往主系統 →</a>
+            </div>
+            <div class="format-card">
+                <h4>新功能測試</h4>
+                <p>測試其他新功能</p>
+                <a href="test_new_features.html" style="color: #8b5cf6; text-decoration: none; font-weight: 500;">新功能測試 →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 頁面載入時顯示系統資訊
+        window.addEventListener('load', function() {
+            const infoSection = document.createElement('div');
+            infoSection.className = 'test-section';
+            infoSection.innerHTML = `
+                <div class="status info">
+                    <h4>📊 系統資訊</h4>
+                    <p><strong>版本:</strong> v1.3.0</p>
+                    <p><strong>支援格式:</strong> 12 種圖片格式</p>
+                    <p><strong>測試時間:</strong> ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+            document.body.insertBefore(infoSection, document.body.firstChild.nextSibling);
+        });
+    </script>
+</body>
+</html> 

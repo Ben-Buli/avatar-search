@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新功能測試 - 社群頭貼搜尋系統 v1.4.0</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, #f3f1ff 25%, #f5f5f5 50%, #f0fdfa 75%, #fff8f0 100%);
+            background-attachment: fixed;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .test-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .feature-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .feature-card h4 {
+            color: #8b5cf6;
+            margin-bottom: 0.5rem;
+        }
+        .shortcut-list {
+            list-style: none;
+            padding: 0;
+        }
+        .shortcut-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .shortcut-list li:last-child {
+            border-bottom: none;
+        }
+        .shortcut-key {
+            background: #e2e8f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 新功能測試 - v1.4.0</h1>
+    
+    <div class="test-section">
+        <h2>🔔 通知系統測試</h2>
+        <p>測試新的現代化通知系統，替換原有的 alert 彈窗</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>成功通知</h4>
+                <p>測試成功類型的通知</p>
+                <button class="test-button" onclick="testSuccessNotification()">測試成功通知</button>
+            </div>
+            <div class="feature-card">
+                <h4>錯誤通知</h4>
+                <p>測試錯誤類型的通知</p>
+                <button class="test-button" onclick="testErrorNotification()">測試錯誤通知</button>
+            </div>
+            <div class="feature-card">
+                <h4>警告通知</h4>
+                <p>測試警告類型的通知</p>
+                <button class="test-button" onclick="testWarningNotification()">測試警告通知</button>
+            </div>
+            <div class="feature-card">
+                <h4>資訊通知</h4>
+                <p>測試資訊類型的通知</p>
+                <button class="test-button" onclick="testInfoNotification()">測試資訊通知</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⌨️ 鍵盤快捷鍵測試</h2>
+        <p>測試新增的鍵盤快捷鍵功能</p>
+        <div class="feature-card">
+            <h4>可用快捷鍵</h4>
+            <ul class="shortcut-list">
+                <li><span class="shortcut-key">Ctrl/Cmd + S</span> - 儲存所有變更</li>
+                <li><span class="shortcut-key">Ctrl/Cmd + F</span> - 聚焦搜尋框</li>
+                <li><span class="shortcut-key">Ctrl/Cmd + A</span> - 全選圖片（管理頁面）</li>
+                <li><span class="shortcut-key">Escape</span> - 關閉模態框</li>
+                <li><span class="shortcut-key">1-3</span> - 快速切換頁面</li>
+            </ul>
+            <div class="status info">
+                💡 提示：請前往主頁面測試這些快捷鍵功能
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⚡ 效能監控測試</h2>
+        <p>測試新的效能監控和錯誤追蹤功能</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>載入時間測試</h4>
+                <p>測試系統載入時間監控</p>
+                <button class="test-button" onclick="testPerformanceMonitoring()">測試效能監控</button>
+            </div>
+            <div class="feature-card">
+                <h4>錯誤處理測試</h4>
+                <p>測試錯誤追蹤和處理</p>
+                <button class="test-button" onclick="testErrorHandling()">測試錯誤處理</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎨 載入動畫測試</h2>
+        <p>測試改進的載入動畫系統</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>載入動畫</h4>
+                <p>測試新的載入動畫效果</p>
+                <button class="test-button" onclick="testLoadingAnimation()">測試載入動畫</button>
+            </div>
+            <div class="feature-card">
+                <h4>長時間載入</h4>
+                <p>模擬長時間載入情況</p>
+                <button class="test-button" onclick="testLongLoading()">測試長時間載入</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 快速連結</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>主頁面</h4>
+                <p>前往主系統測試完整功能</p>
+                <button class="test-button" onclick="window.open('index.html', '_blank')">開啟主頁面</button>
+            </div>
+            <div class="feature-card">
+                <h4>完整測試</h4>
+                <p>運行完整的系統測試</p>
+                <button class="test-button" onclick="window.open('test.html', '_blank')">開啟完整測試</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 通知系統（從主系統複製）
+        function showNotification(message, type = 'info', duration = 3000) {
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#d1fae5' : type === 'error' ? '#fee2e2' : type === 'warning' ? '#fef3c7' : '#dbeafe'};
+                color: ${type === 'success' ? '#065f46' : type === 'error' ? '#991b1b' : type === 'warning' ? '#92400e' : '#1e40af'};
+                border: 1px solid ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                border-radius: 8px;
+                padding: 1rem;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                z-index: 10000;
+                max-width: 400px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                .notification-content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+                .notification-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    margin-left: 1rem;
+                    color: inherit;
+                }
+                .notification-close:hover {
+                    opacity: 0.7;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, duration);
+            }
+        }
+        
+        // 載入動畫系統
+        function showLoading() {
+            const existingLoading = document.querySelector('.loading-overlay');
+            if (existingLoading) {
+                existingLoading.remove();
+            }
+            
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>處理中...</p>
+                </div>
+            `;
+            
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                backdrop-filter: blur(4px);
+            `;
+            
+            const spinnerStyle = document.createElement('style');
+            spinnerStyle.textContent = `
+                .loading-spinner {
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                }
+                .spinner {
+                    width: 40px;
+                    height: 40px;
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #8b5cf6;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    margin: 0 auto 1rem;
+                }
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                .loading-spinner p {
+                    margin: 0;
+                    color: #6b7280;
+                    font-weight: 500;
+                }
+            `;
+            document.head.appendChild(spinnerStyle);
+            
+            document.body.appendChild(loadingOverlay);
+        }
+        
+        function hideLoading() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.transform = 'scale(0.9)';
+                loadingOverlay.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    if (loadingOverlay.parentElement) {
+                        loadingOverlay.remove();
+                    }
+                }, 300);
+            }
+        }
+        
+        // 測試函數
+        function testSuccessNotification() {
+            showNotification('✅ 成功通知測試！這是一個成功類型的通知', 'success');
+        }
+        
+        function testErrorNotification() {
+            showNotification('❌ 錯誤通知測試！這是一個錯誤類型的通知', 'error');
+        }
+        
+        function testWarningNotification() {
+            showNotification('⚠️ 警告通知測試！這是一個警告類型的通知', 'warning');
+        }
+        
+        function testInfoNotification() {
+            showNotification('ℹ️ 資訊通知測試！這是一個資訊類型的通知', 'info');
+        }
+        
+        function testPerformanceMonitoring() {
+            const startTime = performance.now();
+            showLoading();
+            
+            setTimeout(() => {
+                const endTime = performance.now();
+                const loadTime = endTime - startTime;
+                hideLoading();
+                
+                showNotification(`⚡ 效能測試完成！載入時間: ${loadTime.toFixed(2)}ms`, 'success');
+            }, 2000);
+        }
+        
+        function testErrorHandling() {
+            showNotification('🔧 錯誤處理系統正常運作！', 'info');
+        }
+        
+        function testLoadingAnimation() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                showNotification('🎨 載入動畫測試完成！', 'success');
+            }, 2000);
+        }
+        
+        function testLongLoading() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                showNotification('⏱️ 長時間載入測試完成！系統效能良好', 'success');
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 

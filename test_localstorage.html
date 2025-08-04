@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage 功能測試 - 社群頭貼搜尋系統</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f7ff 0%, #f3f1ff 25%, #f5f5f5 50%, #f0fdfa 75%, #fff8f0 100%);
+            background-attachment: fixed;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #10b981;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #ef4444;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-color: #f59e0b;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .feature-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .feature-card h4 {
+            color: #8b5cf6;
+            margin-bottom: 0.5rem;
+        }
+        .json-display {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h2>💾 localStorage 功能測試 - v1.3.0</h2>
+        <p>測試社群頭貼搜尋系統的 localStorage 功能</p>
+    </div>
+
+    <div class="test-section">
+        <div class="status info">
+            <h4>📊 localStorage 功能說明</h4>
+            <ul>
+                <li><strong>自動儲存</strong>：第一次載入時自動將 JSON 資料設定到 localStorage</li>
+                <li><strong>雙重儲存</strong>：修改後同時更新 localStorage 和伺服器檔案</li>
+                <li><strong>一鍵複製</strong>：提供完整的 JSON 資料一鍵複製功能</li>
+                <li><strong>本地管理</strong>：可以查看、清除、匯出、匯入 localStorage 資料</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>🧪 功能測試</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>localStorage 狀態</h4>
+                <p>檢查當前 localStorage 的狀態和內容</p>
+                <button class="test-button" onclick="testLocalStorageStatus()">檢查狀態</button>
+            </div>
+            <div class="feature-card">
+                <h4>模擬資料載入</h4>
+                <p>模擬第一次載入 JSON 資料到 localStorage</p>
+                <button class="test-button" onclick="testDataLoading()">模擬載入</button>
+            </div>
+            <div class="feature-card">
+                <h4>模擬資料儲存</h4>
+                <p>模擬修改後儲存資料到 localStorage</p>
+                <button class="test-button" onclick="testDataSaving()">模擬儲存</button>
+            </div>
+            <div class="feature-card">
+                <h4>JSON 複製功能</h4>
+                <p>測試一鍵複製完整 JSON 資料</p>
+                <button class="test-button" onclick="testJsonCopy()">測試複製</button>
+            </div>
+        </div>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>📋 當前 localStorage 內容</h3>
+        <div id="currentLocalStorage" class="json-display">
+            載入中...
+        </div>
+        <button class="test-button" onclick="refreshLocalStorageDisplay()">重新整理</button>
+    </div>
+
+    <div class="test-section">
+        <h3>🔗 快速連結</h3>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>主系統</h4>
+                <p>前往主系統測試完整功能</p>
+                <a href="index.html" class="test-button" style="text-decoration: none; display: inline-block;">前往主系統</a>
+            </div>
+            <div class="feature-card">
+                <h4>修復測試</h4>
+                <p>測試系統修復情況</p>
+                <a href="test_fix.html" class="test-button" style="text-decoration: none; display: inline-block;">修復測試</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 測試函數
+        function testLocalStorageStatus() {
+            const results = document.getElementById('testResults');
+            const localStorageData = localStorage.getItem('avatarImageData');
+            
+            const resultItem = document.createElement('div');
+            resultItem.className = 'status success';
+            
+            if (localStorageData) {
+                const data = JSON.parse(localStorageData);
+                const dataSize = new Blob([localStorageData]).size;
+                resultItem.innerHTML = `
+                    <h4>✅ localStorage 狀態檢查</h4>
+                    <p><strong>狀態:</strong> 已儲存</p>
+                    <p><strong>大小:</strong> ${(dataSize / 1024).toFixed(2)} KB</p>
+                    <p><strong>圖片數量:</strong> ${Object.keys(data).length}</p>
+                    <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                `;
+            } else {
+                resultItem.className = 'status warning';
+                resultItem.innerHTML = `
+                    <h4>⚠️ localStorage 狀態檢查</h4>
+                    <p><strong>狀態:</strong> 未儲存</p>
+                    <p>localStorage 中沒有找到資料</p>
+                    <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                `;
+            }
+            
+            results.appendChild(resultItem);
+        }
+
+        function testDataLoading() {
+            const results = document.getElementById('testResults');
+            const sampleData = {
+                "test_image_1.png": {
+                    "displayName": "測試圖片1",
+                    "hashtags": ["測試", "示例"],
+                    "theme": "測試主題"
+                },
+                "test_image_2.png": {
+                    "displayName": "測試圖片2",
+                    "hashtags": ["測試", "示例"],
+                    "theme": "測試主題"
+                }
+            };
+            
+            localStorage.setItem('avatarImageData', JSON.stringify(sampleData));
+            
+            const resultItem = document.createElement('div');
+            resultItem.className = 'status success';
+            resultItem.innerHTML = `
+                <h4>✅ 模擬資料載入</h4>
+                <p>已將測試資料載入到 localStorage</p>
+                <p><strong>圖片數量:</strong> ${Object.keys(sampleData).length}</p>
+                <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+            `;
+            
+            results.appendChild(resultItem);
+            refreshLocalStorageDisplay();
+        }
+
+        function testDataSaving() {
+            const results = document.getElementById('testResults');
+            const localStorageData = localStorage.getItem('avatarImageData');
+            
+            if (localStorageData) {
+                const data = JSON.parse(localStorageData);
+                // 模擬修改資料
+                data.lastModified = new Date().toISOString();
+                data.modifiedCount = (data.modifiedCount || 0) + 1;
+                
+                localStorage.setItem('avatarImageData', JSON.stringify(data));
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = 'status success';
+                resultItem.innerHTML = `
+                    <h4>✅ 模擬資料儲存</h4>
+                    <p>已更新 localStorage 中的資料</p>
+                    <p><strong>修改次數:</strong> ${data.modifiedCount}</p>
+                    <p><strong>最後修改:</strong> ${new Date(data.lastModified).toLocaleString()}</p>
+                    <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                `;
+                
+                results.appendChild(resultItem);
+                refreshLocalStorageDisplay();
+            } else {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'status error';
+                resultItem.innerHTML = `
+                    <h4>❌ 模擬資料儲存失敗</h4>
+                    <p>localStorage 中沒有資料可修改</p>
+                    <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                `;
+                
+                results.appendChild(resultItem);
+            }
+        }
+
+        function testJsonCopy() {
+            const results = document.getElementById('testResults');
+            const localStorageData = localStorage.getItem('avatarImageData');
+            
+            if (localStorageData) {
+                navigator.clipboard.writeText(localStorageData).then(() => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'status success';
+                    resultItem.innerHTML = `
+                        <h4>✅ JSON 複製功能測試</h4>
+                        <p>JSON 資料已成功複製到剪貼簿</p>
+                        <p><strong>資料大小:</strong> ${(new Blob([localStorageData]).size / 1024).toFixed(2)} KB</p>
+                        <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                    `;
+                    
+                    results.appendChild(resultItem);
+                }).catch(() => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'status error';
+                    resultItem.innerHTML = `
+                        <h4>❌ JSON 複製功能測試失敗</h4>
+                        <p>複製到剪貼簿失敗</p>
+                        <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                    `;
+                    
+                    results.appendChild(resultItem);
+                });
+            } else {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'status warning';
+                resultItem.innerHTML = `
+                    <h4>⚠️ JSON 複製功能測試</h4>
+                    <p>localStorage 中沒有資料可複製</p>
+                    <small>測試時間: ${new Date().toLocaleTimeString()}</small>
+                `;
+                
+                results.appendChild(resultItem);
+            }
+        }
+
+        function refreshLocalStorageDisplay() {
+            const display = document.getElementById('currentLocalStorage');
+            const localStorageData = localStorage.getItem('avatarImageData');
+            
+            if (localStorageData) {
+                try {
+                    const data = JSON.parse(localStorageData);
+                    display.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    display.textContent = '錯誤：無法解析 localStorage 資料';
+                }
+            } else {
+                display.textContent = 'localStorage 中沒有資料';
+            }
+        }
+
+        // 頁面載入時顯示系統資訊和當前 localStorage 內容
+        window.addEventListener('load', function() {
+            const infoSection = document.createElement('div');
+            infoSection.className = 'test-section';
+            infoSection.innerHTML = `
+                <div class="status info">
+                    <h4>📊 系統資訊</h4>
+                    <p><strong>版本:</strong> v1.3.0</p>
+                    <p><strong>功能:</strong> localStorage 自動儲存、雙重儲存、一鍵複製</p>
+                    <p><strong>測試時間:</strong> ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+            document.body.insertBefore(infoSection, document.body.firstChild.nextSibling);
+            
+            refreshLocalStorageDisplay();
+        });
+    </script>
+</body>
+</html> 
