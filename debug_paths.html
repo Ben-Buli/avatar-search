@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路徑調試工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-image {
+            max-width: 150px;
+            max-height: 150px;
+            border: 3px solid #ddd;
+            margin: 10px;
+            display: inline-block;
+        }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .info { color: blue; }
+        .warning { color: orange; }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border-left: 4px solid #007acc;
+        }
+        .path-test {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 3px solid #007acc;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .image-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #005a9e;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 路徑調試工具</h1>
+    
+    <div class="debug-section">
+        <h2>🌐 環境資訊</h2>
+        <div class="path-test">
+            <strong>完整 URL:</strong> <span id="fullUrl"></span>
+        </div>
+        <div class="path-test">
+            <strong>協議:</strong> <span id="protocol"></span>
+        </div>
+        <div class="path-test">
+            <strong>主機名:</strong> <span id="hostname"></span>
+        </div>
+        <div class="path-test">
+            <strong>路徑:</strong> <span id="pathname"></span>
+        </div>
+        <div class="path-test">
+            <strong>檢測到的 Base Path:</strong> <span id="basePath"></span>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🛠️ 路徑函數測試</h2>
+        <button onclick="testAllPaths()">測試所有路徑</button>
+        <button onclick="testImageLoad()">測試圖片載入</button>
+        <pre id="pathResults"></pre>
+    </div>
+
+    <div class="debug-section">
+        <h2>🖼️ 圖片載入測試</h2>
+        <div class="image-grid" id="imageGrid">
+            <!-- 圖片測試項目將在這裡動態生成 -->
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>📋 手動路徑測試</h2>
+        <div>
+            <label>測試路徑:</label>
+            <input type="text" id="manualPath" value="/Avatar/avatar-1.png" style="width: 300px; padding: 5px;">
+            <button onclick="testManualPath()">測試</button>
+        </div>
+        <div id="manualResult"></div>
+    </div>
+
+    <script>
+        // 動態路徑檢測函數
+        function getBasePath() {
+            const hostname = window.location.hostname;
+            const pathname = window.location.pathname;
+            
+            console.log('Debug - Hostname:', hostname);
+            console.log('Debug - Pathname:', pathname);
+            
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                console.log('Debug - 檢測到本地環境');
+                return '';
+            }
+            
+            if (pathname.includes('/avatar-search/')) {
+                console.log('Debug - 檢測到子路徑部署');
+                return '/avatar-search';
+            }
+            
+            if (hostname === 'avatar.kebalan.org') {
+                console.log('Debug - 檢測到 avatar.kebalan.org 域名');
+                return '';
+            }
+            
+            console.log('Debug - 使用預設路徑');
+            return '';
+        }
+
+        function getImagePath(folder, filename) {
+            const basePath = getBasePath();
+            const fullPath = `${basePath}/${folder}/${encodeURIComponent(filename)}`;
+            console.log(`Debug - ${folder}/${filename} -> ${fullPath}`);
+            return fullPath;
+        }
+
+        function getAvatarPath(filename) {
+            return getImagePath('Avatar', filename);
+        }
+
+        function getAccessoryPath(filename) {
+            return getImagePath('Accessories', filename);
+        }
+
+        // 測試所有路徑
+        function testAllPaths() {
+            const tests = [
+                { name: 'getBasePath()', value: getBasePath() },
+                { name: 'getAvatarPath("avatar-1.png")', value: getAvatarPath('avatar-1.png') },
+                { name: 'getAvatarPath("avatar-2.png")', value: getAvatarPath('avatar-2.png') },
+                { name: 'getAccessoryPath("Frame 427 2.png")', value: getAccessoryPath('Frame 427 2.png') },
+                { name: 'getAccessoryPath("瑪瑙耳環.png")', value: getAccessoryPath('瑪瑙耳環.png') },
+                { name: '直接路徑 "/Avatar/avatar-1.png"', value: '/Avatar/avatar-1.png' },
+                { name: '相對路徑 "Avatar/avatar-1.png"', value: 'Avatar/avatar-1.png' },
+            ];
+
+            let result = '路徑測試結果:\n\n';
+            tests.forEach(test => {
+                result += `${test.name}: "${test.value}"\n`;
+            });
+
+            document.getElementById('pathResults').textContent = result;
+        }
+
+        // 測試圖片載入
+        function testImageLoad() {
+            const testImages = [
+                { name: '頭貼1', path: getAvatarPath('avatar-1.png') },
+                { name: '頭貼2', path: getAvatarPath('avatar-2.png') },
+                { name: '配件1', path: getAccessoryPath('Frame 427 2.png') },
+                { name: '直接路徑', path: '/Avatar/avatar-1.png' },
+                { name: '相對路徑', path: 'Avatar/avatar-1.png' },
+            ];
+
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+
+            testImages.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                
+                const imgElement = document.createElement('img');
+                imgElement.className = 'test-image';
+                imgElement.alt = img.name;
+                
+                const status = document.createElement('div');
+                status.id = `status-${index}`;
+                status.textContent = '載入中...';
+                status.className = 'info';
+                
+                const pathInfo = document.createElement('div');
+                pathInfo.textContent = img.path;
+                pathInfo.style.fontSize = '12px';
+                pathInfo.style.color = '#666';
+                pathInfo.style.wordBreak = 'break-all';
+                
+                imgElement.onload = function() {
+                    status.textContent = '✅ 載入成功';
+                    status.className = 'success';
+                };
+                
+                imgElement.onerror = function() {
+                    status.textContent = '❌ 載入失敗';
+                    status.className = 'error';
+                };
+                
+                item.appendChild(imgElement);
+                item.appendChild(status);
+                item.appendChild(pathInfo);
+                grid.appendChild(item);
+                
+                imgElement.src = img.path;
+            });
+        }
+
+        // 手動路徑測試
+        function testManualPath() {
+            const path = document.getElementById('manualPath').value;
+            const result = document.getElementById('manualResult');
+            
+            const img = new Image();
+            img.onload = function() {
+                result.innerHTML = `<div class="success">✅ 路徑有效: ${path}</div>`;
+            };
+            img.onerror = function() {
+                result.innerHTML = `<div class="error">❌ 路徑無效: ${path}</div>`;
+            };
+            img.src = path;
+        }
+
+        // 頁面載入時初始化
+        window.addEventListener('load', function() {
+            // 顯示環境資訊
+            document.getElementById('fullUrl').textContent = window.location.href;
+            document.getElementById('protocol').textContent = window.location.protocol;
+            document.getElementById('hostname').textContent = window.location.hostname;
+            document.getElementById('pathname').textContent = window.location.pathname;
+            document.getElementById('basePath').textContent = getBasePath();
+            
+            // 自動執行測試
+            testAllPaths();
+            testImageLoad();
+            
+            console.log('Debug - 頁面載入完成');
+            console.log('Debug - 當前環境:', {
+                hostname: window.location.hostname,
+                pathname: window.location.pathname,
+                basePath: getBasePath()
+            });
+        });
+    </script>
+</body>
+</html> 

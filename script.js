@@ -2990,6 +2990,11 @@ function getBasePath() {
         return '/avatar-search';
     }
     
+    // 檢查是否是 avatar.kebalan.org 域名
+    if (hostname === 'avatar.kebalan.org') {
+        return '';
+    }
+    
     // 其他情況（直接域名部署）
     return '';
 }
